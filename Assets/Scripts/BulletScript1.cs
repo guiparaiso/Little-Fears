@@ -18,8 +18,19 @@ public class BulletScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Se colidir com o Boss
+        if (other.CompareTag("Boss"))
+        {
+            Debug.Log("Bullet atingiu o Boss!");
+            Boss boss = other.GetComponent<Boss>();
+            if (boss != null)
+            {
+                boss.TakeDamage(1); // Causa 1 de dano ao Boss
+            }
+            Destroy(gameObject); // Destrói o bullet
+        }
         // Se colidir com um inimigo
-        if (other.CompareTag("Enemy"))
+        else if (other.CompareTag("Enemy"))
         {
             Debug.Log("Bullet atingiu inimigo!");
             Destroy(other.gameObject); // Destrói o inimigo
@@ -35,8 +46,19 @@ public class BulletScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        // Se colidir com o Boss
+        if (collision.gameObject.CompareTag("Boss"))
+        {
+            Debug.Log("Bullet atingiu o Boss!");
+            Boss boss = collision.gameObject.GetComponent<Boss>();
+            if (boss != null)
+            {
+                boss.TakeDamage(1); // Causa 1 de dano ao Boss
+            }
+            Destroy(gameObject); // Destrói o bullet
+        }
         // Se colidir com um inimigo (usando Collision ao invés de Trigger)
-        if (collision.gameObject.CompareTag("Enemy"))
+        else if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Bullet atingiu inimigo!");
             Destroy(collision.gameObject); // Destrói o inimigo
