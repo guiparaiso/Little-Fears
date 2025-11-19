@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] Transform target;
     [SerializeField] float speed = 3.5f;
-    [SerializeField] float stoppingDistance = 2.0f;
+    [SerializeField] float stoppingDistance = 3.0f;
 
     [Header("Fear Settings")]
     [SerializeField] float fearOnCollision = 20f;  // quanto medo aumenta na colisão
