@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     private Rigidbody2D rb;
     public float speed = 5f;
+
+    // Direção atual do jogador (pública para outros scripts acessarem)
+    public Vector2 lastDirection { get; private set; } = Vector2.down;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
             this.animator.SetBool("walking_right", false);
             this.animator.SetBool("walking_up", false);
             this.animator.SetBool("walking_down", false);
+            lastDirection = Vector2.left;
         }
         else if (moveHorizontal > 0) // Movendo para a direita
         {
@@ -50,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
             this.animator.SetBool("walking_right", true);
             this.animator.SetBool("walking_up", false);
             this.animator.SetBool("walking_down", false);
+            lastDirection = Vector2.right;
         }
         else // Sem movimento horizontal
         {
@@ -68,6 +74,7 @@ public class PlayerMovement : MonoBehaviour
             this.animator.SetBool("walking_down", false);
             this.animator.SetBool("walking_left", false);
             this.animator.SetBool("walking_right", false);
+            lastDirection = Vector2.up;
         }
         else if (moveVertical < 0) // Movendo para baixo
         {
@@ -75,6 +82,7 @@ public class PlayerMovement : MonoBehaviour
             this.animator.SetBool("walking_down", true);
             this.animator.SetBool("walking_left", false);
             this.animator.SetBool("walking_right", false);
+            lastDirection = Vector2.down;
         }
         else // Sem movimento vertical
         {
