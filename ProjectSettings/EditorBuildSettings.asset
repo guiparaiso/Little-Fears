@@ -8,6 +8,24 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/maps/corredor.unity
+    guid: 0f708364a2db71447bd12677863c3f52
+  - enabled: 1
+    path: Assets/Scenes/maps/banheiro.unity
+    guid: 5b435b2dec78f476d9e052568f3765d4
+  - enabled: 1
+    path: Assets/Scenes/maps/cozinha.unity
+    guid: 7be3ee6380f8e4b56a14785978d4323d
+  - enabled: 1
+    path: Assets/Scenes/maps/porao.unity
+    guid: 7bc7e50d9aeeb4e98a80ea3bd2ce2f6b
+  - enabled: 1
+    path: Assets/Scenes/maps/quarto_filho.unity
+    guid: 74c02007c638b4dafb3d8ed737fa4fd6
+  - enabled: 1
+    path: Assets/Scenes/maps/quintal.unity
+    guid: fef75219ad6324db89b41bc96f85a1b0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
