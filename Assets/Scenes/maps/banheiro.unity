@@ -445,7 +445,7 @@ GameObject:
   - component: {fileID: 361745877}
   - component: {fileID: 361745876}
   m_Layer: 0
-  m_Name: parede (2)
+  m_Name: right-wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -579,7 +579,7 @@ GameObject:
   - component: {fileID: 474304234}
   - component: {fileID: 474304233}
   m_Layer: 0
-  m_Name: parede (4)
+  m_Name: top-wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1467,7 +1467,7 @@ GameObject:
   - component: {fileID: 1141386963}
   - component: {fileID: 1141386962}
   m_Layer: 0
-  m_Name: parede (3)
+  m_Name: left-wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2076,7 +2076,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 6.7
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -2101,7 +2101,7 @@ Transform:
   m_GameObject: {fileID: 1997376937}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.49, y: -1.77, z: -10}
+  m_LocalPosition: {x: 0.11, y: -5.38, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
