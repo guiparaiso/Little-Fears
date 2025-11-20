@@ -242,7 +242,7 @@ MonoBehaviour:
   spitRange: 6
   spitCooldown: 2
   spitSpeed: 8
-  poisonDamage: 15
+  poisonDamage: 25
   maxHealth: 50
   explosionHealthThreshold: 15
   explosionRadius: 3
@@ -250,5 +250,7 @@ MonoBehaviour:
   explosionEffectPrefab: {fileID: 0}
   explosionWarningColor: {r: 1, g: 0, b: 0, a: 1}
   warningDuration: 1
+  autoExplodeAfterTime: 1
+  timeUntilAutoExplode: 15
   scaryBar: {fileID: 0}
   animator: {fileID: 5044869593727616253}

@@ -16,7 +16,7 @@ public class PumpkinEnemy : MonoBehaviour
     [SerializeField] Transform spitPoint; // Ponto de onde sai o veneno (boca)
     [SerializeField] float spitRange = 6f; // Alcance do ataque
     [SerializeField] float spitCooldown = 2f; // Tempo entre cuspes
-    [SerializeField] float spitSpeed = 8f; // Velocidade do projétil
+    [SerializeField] float spitSpeed = 12f; // Velocidade do projétil (aumentada de 8 para 12)
     [SerializeField] float poisonDamage = 15f; // Dano de medo do veneno
     
     [Header("Health & Explosion")]
