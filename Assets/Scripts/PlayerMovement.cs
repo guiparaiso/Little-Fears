@@ -104,4 +104,13 @@ public class PlayerMovement : MonoBehaviour
             this.animator.SetBool("not_walking", false);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(other.tag == "Key")
+        {
+            Destroy(other.gameObject);
+            KeyManager.instance.AddKey();
+        }
+    }
 }

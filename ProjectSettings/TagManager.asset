@@ -8,6 +8,7 @@ TagManager:
   - Boss
   - Arrow
   - wall
+  - Key
   layers:
   - Default
   - TransparentFX
@@ -44,6 +45,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Objects
+    uniqueID: 4056541029
     locked: 0
   - name: player
     uniqueID: 2999319107
