@@ -21,6 +21,12 @@ public class ScaryBarUI : MonoBehaviour
     public Color panicColor = Color.red;
     public float tenseThreshold = 0.3f;  // 30% -> muda para tenseColor
     public float panicThreshold = 0.7f;  // 70% -> muda para panicColor
+    
+    [Header("Player Damage Feedback")]
+    public SpriteRenderer playerSpriteRenderer; // Arraste o SpriteRenderer do player aqui
+    public Color damageFlashColor = Color.red; // Cor do flash ao levar dano
+    public float flashDuration = 0.2f; // Duração do flash
+    public int flashCount = 2; // Quantas vezes pisca
 
     public AudioSource audioSource;
     public AudioClip onFilledClip;
@@ -31,6 +37,7 @@ public class ScaryBarUI : MonoBehaviour
     private float currentFear = 0f;
     private float visualFear = 0f; // usado para Lerp visual
     private bool filledTriggered = false;
+    private bool isFlashing = false; // Controla se já está piscando
 
     void Reset()
     {
@@ -108,8 +115,11 @@ public class ScaryBarUI : MonoBehaviour
         float prev = currentFear;
         currentFear = clampToZero ? Mathf.Clamp(currentFear + amount, 0f, maxFear) : Mathf.Min(currentFear + amount, maxFear);
 
-        // opcional: efeitos quando aumenta
-        // if (currentFear > prev) { /* piscar, som leve, etc */ }
+        // Efeito de flash quando leva dano (amount positivo) e NÃO está já piscando
+        if (amount > 0 && currentFear > prev && playerSpriteRenderer != null && !isFlashing)
+        {
+            StartCoroutine(DamageFlash());
+        }
     }
 
     /// <summary>
@@ -152,5 +162,31 @@ public class ScaryBarUI : MonoBehaviour
             // permite retrigger quando encher, esvaziar e encher novamente
             filledTriggered = false;
         }
+    }
+    
+    /// <summary>
+    /// Faz o player piscar vermelho quando leva dano
+    /// </summary>
+    private IEnumerator DamageFlash()
+    {
+        if (playerSpriteRenderer == null) yield break;
+        
+        isFlashing = true; // Marca que está piscando
+        Color originalColor = playerSpriteRenderer.color;
+        
+        for (int i = 0; i < flashCount; i++)
+        {
+            // Flash vermelho
+            playerSpriteRenderer.color = damageFlashColor;
+            yield return new WaitForSeconds(flashDuration / 2f);
+            
+            // Volta à cor original
+            playerSpriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(flashDuration / 2f);
+        }
+        
+        // Garante que voltou à cor original
+        playerSpriteRenderer.color = originalColor;
+        isFlashing = false; // Libera para piscar novamente
     }
 }

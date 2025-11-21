@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5344951567847693960}
   - component: {fileID: 7092541376389859856}
   - component: {fileID: 7808338932131813182}
-  - component: {fileID: 7157976475275149597}
   - component: {fileID: 8494078895898232421}
   - component: {fileID: 5098631235208520692}
   - component: {fileID: 4824055424837566924}
@@ -115,24 +114,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7157976475275149597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 321482359762477369}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d84f37b30758384fb1faa9626526042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  speed: 3.5
-  stoppingDistance: 3
-  fearOnCollision: 20
-  scaryBar: {fileID: 0}
-  animator: {fileID: 4824055424837566924}
 --- !u!58 &8494078895898232421
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -250,6 +231,11 @@ MonoBehaviour:
   indicatorDuration: 1
   indicatorColor: {r: 1, g: 0.5, b: 0, a: 0.5}
   indicatorSize: 1
+  showWarningEffect: 1
+  warningDuration: 1
+  warningColor: {r: 1, g: 0, b: 0, a: 0.8}
+  warningPulseSpeed: 8
+  warningGlowIntensity: 2
   flashOnSpawn: 1
   flashDuration: 0.3
   flashColor: {r: 1, g: 1, b: 1, a: 1}
