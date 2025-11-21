@@ -26,6 +26,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/maps/quintal.unity
     guid: fef75219ad6324db89b41bc96f85a1b0
+  - enabled: 1
+    path: Assets/Scenes/Screens/Instructions.unity
+    guid: 6cd83cded9218cf47a02492937d6249f
+  - enabled: 1
+    path: Assets/Scenes/Screens/MainMenu.unity
+    guid: 17888068c406c0a43883884d39956495
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4418827010707492110}
   - component: {fileID: 7025684278037752491}
   - component: {fileID: 4259191106854298286}
-  - component: {fileID: 4186362353396493947}
   - component: {fileID: 3009563926484173110}
   - component: {fileID: 7177949939606285966}
   - component: {fileID: 322648157795931522}
@@ -115,28 +114,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &4186362353396493947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3772195534717383998}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d84f37b30758384fb1faa9626526042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 1230460598022982898, guid: c5bafd6125d9a30489398d6ba446e765, type: 3}
-  speed: 3.5
-  stoppingDistance: 3
-  retreatDistance: 2
-  attackDuration: 0.3
-  retreatSpeed: 5
-  useAttackAnimation: 1
-  fearOnCollision: 20
-  scaryBar: {fileID: 0}
-  animator: {fileID: 322648157795931522}
 --- !u!58 &3009563926484173110
 CircleCollider2D:
   m_ObjectHideFlags: 0

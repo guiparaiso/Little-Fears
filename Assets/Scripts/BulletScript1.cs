@@ -33,7 +33,20 @@ public class BulletScript : MonoBehaviour
         else if (other.CompareTag("Enemy"))
         {
             Debug.Log("Bullet atingiu inimigo!");
-            Destroy(other.gameObject); // Destrói o inimigo
+            
+            // Verifica se é uma PumpkinEnemy (tem sistema de HP)
+            PumpkinEnemy pumpkin = other.GetComponent<PumpkinEnemy>();
+            if (pumpkin != null)
+            {
+                pumpkin.TakeDamage(15f); // Causa dano ao invés de destruir
+                Debug.Log("Bullet causou dano ao Pumpkin!");
+            }
+            else
+            {
+                // Inimigos normais sem HP são destruídos
+                Destroy(other.gameObject);
+            }
+            
             Destroy(gameObject); // Destrói o bullet
         }
         else if (other.CompareTag("fase")) {

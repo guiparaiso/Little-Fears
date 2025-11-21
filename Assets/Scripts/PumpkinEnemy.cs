@@ -208,7 +208,7 @@ public class PumpkinEnemy : MonoBehaviour
         projectile.damage = poisonDamage;
         projectile.scaryBar = scaryBar;
         
-        Debug.Log("Abóbora cuspiu veneno!");
+        //Debug.Log("Abóbora cuspiu veneno!");
     }
     
     void StartExplosion()
@@ -331,10 +331,12 @@ public class PumpkinEnemy : MonoBehaviour
     // Método opcional para dano por colisão - configure as tags no Unity depois
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Se for projétil do player, tenta pegar o dano dele
+        // Ignora se o bullet já vai chamar TakeDamage através do BulletScript
+        // Este método agora é redundante, mas mantemos como fallback
+        
+        /* CÓDIGO REMOVIDO - Agora o BulletScript chama TakeDamage diretamente
         if (other.gameObject.layer != gameObject.layer && !other.CompareTag("Player") && !other.CompareTag("Enemy"))
         {
-            // Tenta pegar o script BulletScript
             var bulletScript = other.GetComponent<BulletScript>();
             if (bulletScript != null)
             {
@@ -343,13 +345,13 @@ public class PumpkinEnemy : MonoBehaviour
                 return;
             }
             
-            // Detecta por nome do objeto como fallback
             if (other.name.Contains("Bullet") || other.name.Contains("Projectile") || other.name.Contains("bullet"))
             {
                 TakeDamage(15f);
                 Debug.Log("Abóbora foi atingida por projétil!");
             }
         }
+        */
     }
     
     System.Collections.IEnumerator DamageFlash()

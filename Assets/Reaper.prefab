@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1249173254308913135}
   - component: {fileID: 3890305069310530769}
   - component: {fileID: 8245949583868606960}
-  - component: {fileID: 8825846951607564232}
   - component: {fileID: 114038575814514560}
   - component: {fileID: 2731891863321879662}
   - component: {fileID: 5044869593727616253}
@@ -133,7 +132,6 @@ MonoBehaviour:
   retreatDistance: 2
   attackDuration: 0.3
   retreatSpeed: 5
-  useAttackAnimation: 1
   fearOnCollision: 20
   scaryBar: {fileID: 0}
   animator: {fileID: 5044869593727616253}
