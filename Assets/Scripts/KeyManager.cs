@@ -38,12 +38,12 @@ public class KeyManager : MonoBehaviour
         {
             GameManager.instance.totalKeys++;
             // Atualiza o texto pegando o valor do GM
-            UpdateKeyCountText();
+            KeyManager.instance.UpdateKeyCountText();
         }
     }
 
     // Atualiza o que aparece na tela
-    void UpdateKeyCountText()
+    public void UpdateKeyCountText()
     {
         keyCountText.text = GameManager.instance.totalKeys.ToString();
     }
