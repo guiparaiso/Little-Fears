@@ -120,6 +120,13 @@ public class ScaryBarUI : MonoBehaviour
         {
             StartCoroutine(DamageFlash());
         }
+
+        if(currentFear >= maxFear)
+        {
+            GameManager.instance.GameOver();
+            currentFear = GameManager.instance.currentFear;
+            visualFear = currentFear;
+        }
     }
 
     /// <summary>

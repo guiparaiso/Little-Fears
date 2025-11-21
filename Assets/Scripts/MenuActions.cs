@@ -17,6 +17,6 @@ public class MenuActions : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene(8);
+        SceneManager.LoadScene(0);
     }
 }

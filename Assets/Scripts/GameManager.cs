@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -42,5 +43,22 @@ public class GameManager : MonoBehaviour
         {
             registeredObjects.Add(id);
         }
+    }
+
+    public void ResetGame()
+    {
+        // Zera os contadores
+        totalKeys = 0;
+        currentFear = 0f;
+
+        // LIMPA a lista de objetos mortos/coletados
+        // Isso faz com que todos os inimigos e chaves "renasçam" na próxima cena
+        registeredObjects.Clear();
+    }
+
+    public void GameOver()
+    {
+        ResetGame();
+        SceneManager.LoadScene(8);
     }
 }
