@@ -107,10 +107,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.tag == "Key")
+        if (other.tag == "Key")
         {
-            Destroy(other.gameObject);
             KeyManager.instance.AddKey();
+            Destroy(other.gameObject);
         }
     }
 }

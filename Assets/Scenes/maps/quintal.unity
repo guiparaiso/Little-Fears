@@ -6717,8 +6717,9 @@ GameObject:
   - component: {fileID: 817800780}
   - component: {fileID: 817800779}
   - component: {fileID: 817800778}
+  - component: {fileID: 817800781}
   m_Layer: 0
-  m_Name: Key
+  m_Name: Key_quintal
   m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6831,6 +6832,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &817800781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 817800777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: 
 --- !u!1 &819058513
 GameObject:
   m_ObjectHideFlags: 0

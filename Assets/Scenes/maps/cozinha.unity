@@ -2104,13 +2104,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
       propertyPath: m_Name
-      value: Reaper
+      value: Reaper_cozinha
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 755742465}
   m_SourcePrefab: {fileID: 100100000, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
+--- !u!1 &755742464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
+  m_PrefabInstance: {fileID: 755742463}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &755742465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755742464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Reaper_0_cozinha
 --- !u!1 &794680566
 GameObject:
   m_ObjectHideFlags: 0
@@ -2614,7 +2635,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves
+      value: Slaves_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2658,7 +2679,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -2667,8 +2688,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 910753812}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &910753811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 910753810}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &910753812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910753811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_0_cozinha
 --- !u!1 &971422358
 GameObject:
   m_ObjectHideFlags: 0
@@ -3001,7 +3043,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves (5)
+      value: Slaves_5_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3045,7 +3087,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -3054,8 +3096,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1078312179}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &1078312178 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 1078312177}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1078312179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1078312178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_5_cozinha
 --- !u!1 &1093493455
 GameObject:
   m_ObjectHideFlags: 0
@@ -3372,7 +3435,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves (4)
+      value: Slaves_4_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3416,7 +3479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -3425,8 +3488,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1174958355}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &1174958354 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 1174958353}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1174958355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1174958354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_4_cozinha
 --- !u!1 &1340646731
 GameObject:
   m_ObjectHideFlags: 0
@@ -3513,7 +3597,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves (1)
+      value: Slaves_1_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3557,7 +3641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -3566,8 +3650,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1535548841}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &1535548840 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 1535548839}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1535548841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535548840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_1_cozinha
 --- !u!1001 &1585708959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3582,7 +3687,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves (2)
+      value: Slaves_2_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3626,7 +3731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -3635,8 +3740,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1585708961}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &1585708960 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 1585708959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1585708961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1585708960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_2_cozinha
 --- !u!1001 &1586106293
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3651,7 +3777,7 @@ PrefabInstance:
       objectReference: {fileID: 208952853}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
-      value: Slaves (3)
+      value: Slaves_3_cozinha
       objectReference: {fileID: 0}
     - target: {fileID: 4418827010707492110, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3695,7 +3821,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7025684278037752491, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_SortingLayerID
@@ -3704,8 +3830,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1586106295}
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+--- !u!1 &1586106294 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+  m_PrefabInstance: {fileID: 1586106293}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1586106295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1586106294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Slave_3_cozinha
 --- !u!1 &1595322602
 GameObject:
   m_ObjectHideFlags: 0
@@ -4113,8 +4260,9 @@ GameObject:
   - component: {fileID: 1789264404}
   - component: {fileID: 1789264403}
   - component: {fileID: 1789264405}
+  - component: {fileID: 1789264406}
   m_Layer: 0
-  m_Name: Key
+  m_Name: Key_cozinha
   m_TagString: Key
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4227,6 +4375,19 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 4.32, y: 7}
   m_Direction: 0
+--- !u!114 &1789264406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1789264402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectID: Key_cozinha
 --- !u!1 &1946323614
 GameObject:
   m_ObjectHideFlags: 0

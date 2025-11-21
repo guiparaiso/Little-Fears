@@ -52,9 +52,19 @@ public class ScaryBarUI : MonoBehaviour
         filledImage.type = Image.Type.Filled;
         filledImage.fillMethod = Image.FillMethod.Horizontal;
         filledImage.fillAmount = 0f;
-        visualFear = 0f;
-        currentFear = 0f;
-        UpdateColor();
+
+        if (GameManager.instance != null)
+        {
+            currentFear = GameManager.instance.currentFear;
+            visualFear = currentFear; // Para não ter "lerp" estranho na troca de cena
+        }
+        else
+        {
+            currentFear = 0f;
+            visualFear = 0f;
+        }
+
+            UpdateColor();
     }
 
     void Update()
@@ -65,6 +75,11 @@ public class ScaryBarUI : MonoBehaviour
 
         // suaviza a transição visual
         visualFear = Mathf.Lerp(visualFear, currentFear, 1f - Mathf.Exp(-fillSmoothing * Time.deltaTime));
+
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.currentFear = currentFear;
+        }
 
         // converte pra 0..1 e aplica no Image.fillAmount
         float normalized = Mathf.Clamp01(visualFear / Mathf.Max(0.0001f, maxFear));

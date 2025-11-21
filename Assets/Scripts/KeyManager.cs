@@ -9,8 +9,6 @@ public class KeyManager : MonoBehaviour
     [Header("Configurações da UI")]
     public TMP_Text keyCountText; // Arraste o componente de texto aqui no Inspector
 
-    private int keyCount = 0;
-
     void Awake()
     {
         // Configura a instância
@@ -26,19 +24,27 @@ public class KeyManager : MonoBehaviour
 
     void Start()
     {
-        UpdateKeyCountText();
+        // Ao iniciar a cena, já busca o valor correto
+        if (GameManager.instance != null)
+        {
+            UpdateKeyCountText();
+        }
     }
 
     // Método chamado pela chave quando o player a coleta
     public void AddKey()
     {
-        keyCount++;
-        UpdateKeyCountText();
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.totalKeys++;
+            // Atualiza o texto pegando o valor do GM
+            UpdateKeyCountText();
+        }
     }
 
     // Atualiza o que aparece na tela
     void UpdateKeyCountText()
     {
-        keyCountText.text = keyCount.ToString();
+        keyCountText.text = GameManager.instance.totalKeys.ToString();
     }
 }
