@@ -104,8 +104,6 @@ public class Boss : MonoBehaviour
             return;
         }
 
-        Debug.Log("Boss atirando!");
-
         // Cria o bullet na posição do boss
         GameObject newBullet = Instantiate(bossBulletPrefab, transform.position, Quaternion.identity);
 

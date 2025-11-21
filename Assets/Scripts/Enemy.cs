@@ -179,7 +179,6 @@ public class Enemy : MonoBehaviour
             if (scaryBar != null)
             {
                 scaryBar.AddFear(fearOnCollision);
-                Debug.Log("Inimigo causou medo!");
             }
             
             // Inicia ataque e recuo

@@ -22,14 +22,12 @@ public class BossBulletScript : MonoBehaviour
         // Se colidir com o player
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Boss bullet atingiu o player!");
             // Aqui você pode adicionar dano ao player
             Destroy(gameObject); // Destrói apenas o bullet
         }
         // Se colidir com qualquer outro objeto que não seja o Boss
         else if (!other.CompareTag("Boss"))
         {
-            Debug.Log("Boss bullet colidiu com: " + other.name);
             Destroy(gameObject); // Destrói apenas o bullet
         }
     }
@@ -39,14 +37,12 @@ public class BossBulletScript : MonoBehaviour
         // Se colidir com o player
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Boss bullet atingiu o player!");
             // Aqui você pode adicionar dano ao player
             Destroy(gameObject); // Destrói apenas o bullet
         }
         // Se colidir com qualquer outro objeto que não seja o Boss
         else if (!collision.gameObject.CompareTag("Boss"))
         {
-            Debug.Log("Boss bullet colidiu com: " + collision.gameObject.name);
             Destroy(gameObject); // Destrói apenas o bullet
         }
     }
