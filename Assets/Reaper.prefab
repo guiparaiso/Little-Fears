@@ -114,27 +114,6 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8825846951607564232
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3700279453481728741}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d84f37b30758384fb1faa9626526042, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  target: {fileID: 0}
-  speed: 3.5
-  stoppingDistance: 0.1
-  retreatDistance: 2
-  attackDuration: 0.3
-  retreatSpeed: 5
-  fearOnCollision: 20
-  scaryBar: {fileID: 0}
-  animator: {fileID: 5044869593727616253}
 --- !u!58 &114038575814514560
 CircleCollider2D:
   m_ObjectHideFlags: 0
