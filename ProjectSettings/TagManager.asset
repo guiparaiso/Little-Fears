@@ -9,6 +9,7 @@ TagManager:
   - Arrow
   - wall
   - Key
+  - fase
   layers:
   - Default
   - TransparentFX

@@ -137,7 +137,7 @@ public class EnemySpawner : MonoBehaviour
             // Inicia parado com animação stopping
             if (animator != null)
             {
-                animator.SetBool("stopping", true);
+                animator.SetBool("stopped", true);
                 animator.SetBool("walking_left", false);
                 animator.SetBool("walking_right", false);
                 animator.SetBool("walking_up", false);
@@ -199,7 +199,7 @@ public class EnemySpawner : MonoBehaviour
         if (animator == null) return;
         
         // Desativa todas as animações de movimento
-        animator.SetBool("stopping", false);
+        animator.SetBool("stopped", false);
         animator.SetBool("walking_left", false);
         animator.SetBool("walking_right", false);
         animator.SetBool("walking_up", false);
@@ -312,7 +312,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         // Se está em movimento, desativa stopping e idle
-        animator.SetBool("stopping", false);
+        animator.SetBool("stopped", false);
         if (!string.IsNullOrEmpty(idleAnimationState))
         {
             animator.SetBool(idleAnimationState, false);

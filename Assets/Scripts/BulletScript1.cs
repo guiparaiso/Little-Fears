@@ -36,8 +36,11 @@ public class BulletScript : MonoBehaviour
             Destroy(other.gameObject); // Destrói o inimigo
             Destroy(gameObject); // Destrói o bullet
         }
+        else if (other.CompareTag("fase")) {
+            Debug.Log("Bullet colidiu com fase: " + other.gameObject.name);
+        }
         // Se colidir com qualquer outro objeto que não seja o player
-        else if (!other.CompareTag("Player"))
+        else if (!other.CompareTag("Player") && !other.name.Contains("limit"))
         {
             Debug.Log("Bullet colidiu com: " + other.name);
             Destroy(gameObject); // Destrói apenas o bullet
@@ -70,8 +73,12 @@ public class BulletScript : MonoBehaviour
             // Não faz nada, ignora colisão com o player
             Debug.Log("Bullet colidiu com parede: " + collision.gameObject.name);
             Destroy(gameObject); // Destrói apenas o bullet
-            
         }
-        // Se colidir com qualquer outro objeto que não seja o player
+        // Se colidir com qualquer outro objeto que não seja o player e não seja "limit"
+        else if (!collision.gameObject.CompareTag("Player") && !collision.gameObject.name.Contains("limit"))
+        {
+            Debug.Log("Bullet colidiu (Collision) com: " + collision.gameObject.name);
+            Destroy(gameObject); // Destrói apenas o bullet
+        }
     }
 }
