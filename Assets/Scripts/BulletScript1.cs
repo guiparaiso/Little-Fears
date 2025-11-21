@@ -64,11 +64,14 @@ public class BulletScript : MonoBehaviour
             Destroy(collision.gameObject); // Destrói o inimigo
             Destroy(gameObject); // Destrói o bullet
         }
-        // Se colidir com qualquer outro objeto que não seja o player
-        else if (!collision.gameObject.CompareTag("Player"))
+
+        else if (collision.gameObject.CompareTag("wall"))
         {
-            Debug.Log("Bullet colidiu com: " + collision.gameObject.name);
+            // Não faz nada, ignora colisão com o player
+            Debug.Log("Bullet colidiu com parede: " + collision.gameObject.name);
             Destroy(gameObject); // Destrói apenas o bullet
+            
         }
+        // Se colidir com qualquer outro objeto que não seja o player
     }
 }

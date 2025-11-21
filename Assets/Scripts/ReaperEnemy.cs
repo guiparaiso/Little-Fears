@@ -148,9 +148,9 @@ public class ReaperEnemy : MonoBehaviour
                 
             case ReaperState.Chasing:
                 // SEMPRE persegue o player
-                agent.isStopped = false;
                 if (agent.isOnNavMesh)
                 {
+                    agent.isStopped = false;
                     agent.SetDestination(target.position);
                 }
                 
@@ -193,7 +193,10 @@ public class ReaperEnemy : MonoBehaviour
             case ReaperState.Teleporting:
             case ReaperState.Cursing:
                 // Estados controlados pelas corrotinas
-                agent.isStopped = true;
+                if (agent.isOnNavMesh)
+                {
+                    agent.isStopped = true;
+                }
                 break;
         }
         
@@ -209,7 +212,10 @@ public class ReaperEnemy : MonoBehaviour
         currentState = ReaperState.Teleporting;
         teleportTimer = 0f;
         
-        agent.isStopped = true;
+        if (agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+        }
         
         // AVISO VISUAL: Pisca vermelho rapidamente
         if (spriteRenderer != null && animator != null)
@@ -302,12 +308,11 @@ public class ReaperEnemy : MonoBehaviour
         
         // Garante que volta a se mover
         isTeleporting = false;
-        agent.isStopped = false;
         currentState = ReaperState.Chasing;
         
-        // Força atualização do destino
-        if (agent.isOnNavMesh && target != null)
+        if (agent.isOnNavMesh)
         {
+            agent.isStopped = false;
             agent.SetDestination(target.position);
         }
     }
@@ -320,7 +325,10 @@ public class ReaperEnemy : MonoBehaviour
         currentState = ReaperState.Cursing;
         curseTimer = 0f;
         
-        agent.isStopped = true;
+        if (agent.isOnNavMesh)
+        {
+            agent.isStopped = true;
+        }
         
         // Animação de parado + casting
         if (animator != null)
@@ -380,12 +388,11 @@ public class ReaperEnemy : MonoBehaviour
         
         // Garante que volta a se mover
         isCasting = false;
-        agent.isStopped = false;
         currentState = ReaperState.Chasing;
         
-        // Força atualização do destino
-        if (agent.isOnNavMesh && target != null)
+        if (agent.isOnNavMesh)
         {
+            agent.isStopped = false;
             agent.SetDestination(target.position);
         }
     }
