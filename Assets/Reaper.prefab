@@ -133,6 +133,7 @@ MonoBehaviour:
   retreatDistance: 2
   attackDuration: 0.3
   retreatSpeed: 5
+  useAttackAnimation: 1
   fearOnCollision: 20
   scaryBar: {fileID: 0}
   animator: {fileID: 5044869593727616253}
@@ -247,18 +248,26 @@ MonoBehaviour:
   teleportEffectPrefab: {fileID: 0}
   teleportEffectDuration: 0.5
   teleportFlashColor: {r: 0.5, g: 0, b: 0.5, a: 1}
-  teleportWarningColor: {r: 1, g: 0, b: 0, a: 1}
+  teleportWarningColor: {r: 0.4490565, g: 0.42956915, b: 0.42956915, a: 1}
   canCurseGround: 1
-  curseCooldown: 6
-  maxCursedAreas: 3
-  cursedGroundPrefab: {fileID: 0}
+  curseCooldown: 2
+  maxCursedAreas: 5
+  cursedGroundPrefab: {fileID: 2652667339099605446, guid: 1d7815e800210924499e5e5929d59a41, type: 3}
   curseRadius: 2.5
   curseDuration: 5
-  curseDamage: 15
+  curseDamage: 20
   curseDamageInterval: 0.5
   attackRange: 1.5
   meleeDamage: 20
   meleeAttackCooldown: 1.2
+  retreatDistance: 2
+  attackDuration: 0.3
+  retreatSpeed: 5
   isInvulnerableDuringTeleport: 1
+  useAttackAnimation: 1
+  slashEffectPrefab: {fileID: 4255352775117781607, guid: b2940df209d2439468afae85044703af, type: 3}
+  slashOffset: {x: 0, y: 0, z: 0}
+  slashScale: 2
+  slashDuration: 1
   scaryBar: {fileID: 0}
-  animator: {fileID: 0}
+  animator: {fileID: 5044869593727616253}

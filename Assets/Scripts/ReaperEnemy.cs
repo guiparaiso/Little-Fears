@@ -42,6 +42,9 @@ public class ReaperEnemy : MonoBehaviour
     [SerializeField] float attackRange = 1.5f;
     [SerializeField] float meleeDamage = 20f;
     [SerializeField] float meleeAttackCooldown = 1.2f; // Cooldown entre ataques corpo-a-corpo
+    [SerializeField] float retreatDistance = 2f; // Distância para recuar após ataque
+    [SerializeField] float attackDuration = 0.3f; // Tempo pausado durante ataque
+    [SerializeField] float retreatSpeed = 5f; // Velocidade do recuo
     [SerializeField] bool isInvulnerableDuringTeleport = true; // Não pode ser atingido durante teleporte
     [SerializeField] bool useAttackAnimation = true; // Ativa animação de ataque
     [SerializeField] GameObject slashEffectPrefab; // Prefab do efeito de slash
@@ -62,6 +65,8 @@ public class ReaperEnemy : MonoBehaviour
     private float teleportTimer = 0f;
     private float curseTimer = 0f;
     private float meleeAttackTimer = 0f;
+    private float attackTimer = 0f;
+    private Vector3 retreatTarget;
     private bool isTeleporting = false;
     private bool isCasting = false;
     private int currentCursedAreas = 0;
@@ -70,7 +75,7 @@ public class ReaperEnemy : MonoBehaviour
     private bool isEnraged = false; // Fica furioso quando HP < 50%
     private bool isDesperado = false; // Fica desesperado quando HP < 25%
     
-    private enum ReaperState { Idle, Chasing, Attacking, Teleporting, Cursing }
+    private enum ReaperState { Idle, Chasing, Attacking, Retreating, Teleporting, Cursing }
     private ReaperState currentState = ReaperState.Chasing;
 
     private void Start()
@@ -80,7 +85,7 @@ public class ReaperEnemy : MonoBehaviour
         agent.speed = speed;
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        agent.stoppingDistance = 0f; // Precisa chegar perto para colidir
+        agent.stoppingDistance = 0.1f; // Precisa chegar perto para colidir
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         agent.radius = 0.25f;
         agent.avoidancePriority = Random.Range(30, 50);
@@ -156,6 +161,7 @@ public class ReaperEnemy : MonoBehaviour
                 if (agent.isOnNavMesh)
                 {
                     agent.isStopped = false;
+                    agent.stoppingDistance = 0.1f; // stoppingDistance = 0 para colidir com o player
                     agent.SetDestination(target.position);
                 }
                 
@@ -192,6 +198,47 @@ public class ReaperEnemy : MonoBehaviour
                 }
                 // Prioridade 3: Continua perseguindo até colidir com o player
                 // O ataque acontece via OnTriggerEnter2D quando colidir
+                break;
+                
+            case ReaperState.Attacking:
+                // PARA completamente durante ataque
+                if (agent.isOnNavMesh)
+                {
+                    agent.isStopped = true;
+                    agent.velocity = Vector3.zero;
+                }
+                attackTimer += Time.deltaTime;
+                
+                if (attackTimer >= attackDuration)
+                {
+                    // Calcula para onde recuar (direção oposta ao player)
+                    Vector3 directionAway = (transform.position - target.position).normalized;
+                    retreatTarget = transform.position + directionAway * retreatDistance;
+                    
+                    currentState = ReaperState.Retreating;
+                    if (agent.isOnNavMesh)
+                    {
+                        agent.isStopped = false;
+                    }
+                }
+                break;
+                
+            case ReaperState.Retreating:
+                // Recua RAPIDAMENTE para longe
+                if (agent.isOnNavMesh)
+                {
+                    agent.isStopped = false;
+                    agent.speed = retreatSpeed; // Mais rápido que perseguição
+                    agent.stoppingDistance = 0.2f;
+                    agent.SetDestination(retreatTarget);
+                }
+
+                // Volta a perseguir quando chega perto do destino de recuo
+                if (!agent.pathPending && agent.remainingDistance <= 0.5f)
+                {
+                    agent.speed = isEnraged ? ragingSpeed : speed; // Restaura velocidade normal
+                    currentState = ReaperState.Chasing;
+                }
                 break;
                 break;
                 
@@ -276,9 +323,11 @@ public class ReaperEnemy : MonoBehaviour
         
         yield return new WaitForSeconds(0.3f);
         
-        // Calcula posição de teleporte (perto do player, mas não muito)
-        Vector3 directionToPlayer = (target.position - transform.position).normalized;
-        Vector3 teleportPos = target.position - directionToPlayer * Random.Range(teleportMinDistance, teleportDistance);
+        // Calcula posição de teleporte - direção ALEATÓRIA ao redor do player
+        float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+        Vector2 randomDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
+        float randomDistance = Random.Range(teleportMinDistance, teleportDistance);
+        Vector3 teleportPos = target.position + (Vector3)randomDirection * randomDistance;
         
         // Verifica se a posição é válida no NavMesh
         UnityEngine.AI.NavMeshHit hit;
@@ -300,7 +349,11 @@ public class ReaperEnemy : MonoBehaviour
                 Instantiate(teleportEffectPrefab, transform.position, Quaternion.identity);
             }
             
-            Debug.Log("💀 Reaper teleportou!");
+            Debug.Log($"💀 Reaper teleportou para perto do player! Distância: {Vector3.Distance(hit.position, target.position):F1}");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Não encontrou posição válida no NavMesh para teleporte!");
         }
         
         // Restaura cor
@@ -504,18 +557,36 @@ public class ReaperEnemy : MonoBehaviour
         float moveHorizontal = velocity.x;
         float moveVertical = velocity.y;
         
-        // Se está parado (teleportando, cursando ou atacando)
-        if (velocity.magnitude < 0.1f || isTeleporting || isCasting)
+        // Se está teleportando ou cursando, para completamente
+        if (isTeleporting || isCasting)
         {
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", false);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
-            animator.SetBool("stopping", true);
+            animator.SetBool("stopped", true);
             return;
         }
         
-        animator.SetBool("stopping", false);
+        // Durante ataque ou recuo, MANTÉM a direção atual da animação
+        if (currentState == ReaperState.Attacking || currentState == ReaperState.Retreating)
+        {
+            // Não muda as animações, mantém a última direção
+            return;
+        }
+        
+        // Se está completamente parado (não atacando nem recuando)
+        if (velocity.magnitude < 0.1f)
+        {
+            animator.SetBool("walking_left", false);
+            animator.SetBool("walking_right", false);
+            animator.SetBool("walking_up", false);
+            animator.SetBool("walking_down", false);
+            animator.SetBool("stopped", true);
+            return;
+        }
+        
+        animator.SetBool("stopped", false);
         
         // Previne diagonal
         if (Mathf.Abs(moveHorizontal) > 0.1f && Mathf.Abs(moveVertical) > 0.1f)
@@ -559,13 +630,17 @@ public class ReaperEnemy : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ataque corpo-a-corpo quando colidir com o player
-        if (other.CompareTag("Player") && meleeAttackTimer >= meleeAttackCooldown)
+        // Quando colidir com o player, entra no estado de ataque
+        if (other.CompareTag("Player") && meleeAttackTimer >= meleeAttackCooldown && currentState == ReaperState.Chasing)
         {
+            currentState = ReaperState.Attacking;
+            attackTimer = 0f;
+            meleeAttackTimer = 0f;
+            
+            // Causa dano e efeitos
             if (scaryBar != null)
             {
                 scaryBar.AddFear(meleeDamage);
-                meleeAttackTimer = 0f; // Reseta cooldown
                 Debug.Log("💀 Reaper atacou corpo-a-corpo!");
                 
                 // Efeito visual do ataque
@@ -577,19 +652,11 @@ public class ReaperEnemy : MonoBehaviour
                 // Instancia efeito de slash no player
                 if (useAttackAnimation && slashEffectPrefab != null)
                 {
-                    // Cria o slash na posição do PLAYER (other), não do inimigo
                     Vector3 slashPosition = other.transform.position + slashOffset;
                     GameObject slash = Instantiate(slashEffectPrefab, slashPosition, Quaternion.identity);
-                    
-                    // Garante que está no layer correto e na posição Z correta
                     slash.transform.position = new Vector3(slashPosition.x, slashPosition.y, other.transform.position.z - 0.1f);
-                    
-                    // Aplica o tamanho configurado
                     slash.transform.localScale = Vector3.one * slashScale;
-                    
                     Debug.Log($"⚔️ Reaper slash criado no PLAYER - Scale: {slashScale}");
-                    
-                    // Auto-destrói o slash após slashDuration
                     Destroy(slash, slashDuration);
                 }
             }

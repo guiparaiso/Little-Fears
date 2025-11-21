@@ -13,6 +13,9 @@ public class CursedGroundArea : MonoBehaviour
     [Header("Visual Effects")]
     [SerializeField] bool showWarning = true;
     [SerializeField] float warningDuration = 0.5f;
+    [SerializeField] bool isTranslucent = false; // Se true, usa transparência
+    [SerializeField] Color darkColor = new Color(0.2f, 0f, 0.2f, 1f); // Roxo escuro
+    [SerializeField] Color lightColor = new Color(0.6f, 0f, 0.6f, 1f); // Roxo claro
     
     private CircleCollider2D areaCollider;
     private SpriteRenderer spriteRenderer;
@@ -152,8 +155,15 @@ public class CursedGroundArea : MonoBehaviour
     {
         if (spriteRenderer == null) yield break;
         
-        Color darkColor = new Color(0.2f, 0f, 0.2f, 0.7f); // Roxo escuro mais opaco
-        Color lightColor = new Color(0.6f, 0f, 0.6f, 0.9f); // Roxo claro mais opaco
+        // Aplica transparência se configurado
+        Color dark = darkColor;
+        Color light = lightColor;
+        
+        if (isTranslucent)
+        {
+            dark.a = 0.5f;
+            light.a = 0.7f;
+        }
         
         float elapsed = 0f;
         
@@ -162,7 +172,7 @@ public class CursedGroundArea : MonoBehaviour
             elapsed += Time.deltaTime * 2.5f; // Pulsa mais rápido
             
             float t = Mathf.Sin(elapsed * Mathf.PI) * 0.5f + 0.5f;
-            spriteRenderer.color = Color.Lerp(darkColor, lightColor, t);
+            spriteRenderer.color = Color.Lerp(dark, light, t);
             
             // Variação de escala mais intensa
             float scale = radius * 2f * (1f + Mathf.Sin(elapsed * Mathf.PI) * 0.15f);

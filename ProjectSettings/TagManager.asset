@@ -53,5 +53,8 @@ TagManager:
   - name: player
     uniqueID: 2999319107
     locked: 0
+  - name: slash
+    uniqueID: 1616732941
+    locked: 0
   m_RenderingLayers:
   - Default

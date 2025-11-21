@@ -934,6 +934,10 @@ MonoBehaviour:
   panicColor: {r: 0.6580553, g: 0, b: 1, a: 1}
   tenseThreshold: 0.3
   panicThreshold: 0.7
+  playerSpriteRenderer: {fileID: 935880896}
+  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
+  flashCount: 2
   audioSource: {fileID: 0}
   onFilledClip: {fileID: 0}
   onScaryBarFilled:
@@ -1091,6 +1095,11 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.29, y: 0.32}
   m_EdgeRadius: 0
+--- !u!212 &935880896 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8560012155852305115, guid: c5bafd6125d9a30489398d6ba446e765, type: 3}
+  m_PrefabInstance: {fileID: 569212979}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &966422148
 GameObject:
   m_ObjectHideFlags: 0
