@@ -130,6 +130,10 @@ MonoBehaviour:
   target: {fileID: 1230460598022982898, guid: c5bafd6125d9a30489398d6ba446e765, type: 3}
   speed: 3.5
   stoppingDistance: 3
+  retreatDistance: 2
+  attackDuration: 0.3
+  retreatSpeed: 5
+  useAttackAnimation: 1
   fearOnCollision: 20
   scaryBar: {fileID: 0}
   animator: {fileID: 322648157795931522}
@@ -233,11 +237,14 @@ MonoBehaviour:
   target: {fileID: 0}
   speed: 3.5
   stoppingDistance: 1.2
-  useAttackBehavior: 1
-  attackDistance: 1.2
   retreatDistance: 1.2
-  attackDuration: 0.2
+  attackDuration: 1
   retreatSpeed: 5
+  useAttackAnimation: 1
+  slashEffectPrefab: {fileID: 4255352775117781607, guid: 182225f029314ba46a67772275227b28, type: 3}
+  slashOffset: {x: 0, y: 0, z: 0}
+  slashScale: 4
+  slashDuration: 2
   pathUpdateInterval: 0.5
   animationUpdateInterval: 0.1
   fearOnCollision: 20

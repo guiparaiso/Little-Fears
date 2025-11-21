@@ -11,6 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] float retreatDistance = 2f; // Distância para recuar após ataque (em unidades)
     [SerializeField] float attackDuration = 0.3f; // Tempo pausado durante ataque (em segundos)
     [SerializeField] float retreatSpeed = 5f; // Velocidade do recuo
+    [SerializeField] bool useAttackAnimation = true; // Ativa animação de ataque
 
     [Header("Fear Settings")]
     [SerializeField] float fearOnCollision = 20f;  // quanto medo aumenta na colisão

@@ -11,6 +11,11 @@ public class SpannerScript : MonoBehaviour
     [SerializeField] float retreatDistance = 2f; // Distância para recuar após ataque (em unidades)
     [SerializeField] float attackDuration = 0.3f; // Tempo pausado durante ataque (em segundos)
     [SerializeField] float retreatSpeed = 5f; // Velocidade do recuo
+    [SerializeField] bool useAttackAnimation = true; // Ativa animação de ataque
+    [SerializeField] GameObject slashEffectPrefab; // Prefab do efeito de slash
+    [SerializeField] Vector3 slashOffset = Vector3.zero; // Offset da posição do slash
+    [SerializeField] float slashScale = 2f; // Tamanho do slash (1 = tamanho original)
+    [SerializeField] float slashDuration = 0.5f; // Duração do efeito de slash em segundos (diferente do attackDuration)
     
     [Header("Performance")]
     [SerializeField] float pathUpdateInterval = 0.2f; // Atualiza destino a cada 0.2s
@@ -109,6 +114,12 @@ public class SpannerScript : MonoBehaviour
                     
                     currentState = State.Retreating;
                     agent.isStopped = false;
+                    
+                    // Reseta animações de ataque
+                    if (useAttackAnimation && animator != null)
+                    {
+                        animator.SetBool("attacking", false);
+                    }
                 }
                 break;
 
@@ -144,6 +155,17 @@ public class SpannerScript : MonoBehaviour
     private void UpdateAnimations()
     {
         if (animator == null) return;
+        
+        // Se está atacando, mostra animação de ataque (slash genérico)
+        if (currentState == State.Attacking && useAttackAnimation)
+        {
+            animator.SetBool("attacking", true);
+            animator.SetBool("walking_left", false);
+            animator.SetBool("walking_right", false);
+            animator.SetBool("walking_up", false);
+            animator.SetBool("walking_down", false);
+            return;
+        }
 
         float moveHorizontal = lastVelocity.x;
         float moveVertical = lastVelocity.y;
@@ -214,6 +236,47 @@ public class SpannerScript : MonoBehaviour
             // Inicia ataque e recuo (IGUAL AO ENEMY.CS)
             currentState = State.Attacking;
             attackTimer = 0f;
+            
+            // Instancia efeito de slash
+            if (useAttackAnimation && slashEffectPrefab != null)
+            {
+                // Cria o slash na posição do PLAYER (other), não do inimigo
+                Vector3 slashPosition = other.transform.position + slashOffset;
+                GameObject slash = Instantiate(slashEffectPrefab, slashPosition, Quaternion.identity);
+                
+                // Garante que está no layer correto e na posição Z correta
+                slash.transform.position = new Vector3(slashPosition.x, slashPosition.y, other.transform.position.z - 0.1f);
+                
+                // Aplica o tamanho configurado
+                slash.transform.localScale = Vector3.one * slashScale;
+                
+                Debug.Log($"✅ Slash criado no PLAYER - Pos: {slash.transform.position}, Scale: {slash.transform.localScale}");
+                
+                // Verifica se tem SpriteRenderer
+                SpriteRenderer sr = slash.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    Debug.Log($"✅ Sprite: {sr.sprite?.name ?? "NULL"}, Color: {sr.color}");
+                    Debug.Log($"✅ Sorting: Layer={sr.sortingLayerName}, Order={sr.sortingOrder}");
+                }
+                
+                // Auto-destrói o slash após slashDuration (não attackDuration)
+                Destroy(slash, slashDuration);
+            }
+            else
+            {
+                // Debug para identificar o problema
+                if (!useAttackAnimation)
+                    Debug.LogWarning("⚠️ useAttackAnimation está DESATIVADO!");
+                if (slashEffectPrefab == null)
+                    Debug.LogWarning("⚠️ slashEffectPrefab está NULL! Arraste o prefab no Inspector.");
+                    
+                // Se não tem prefab, usa animação do animator
+                if (useAttackAnimation && animator != null)
+                {
+                    UpdateAnimations();
+                }
+            }
         }
     }
 }
