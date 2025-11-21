@@ -10,4 +10,13 @@ public class MenuActions : MonoBehaviour
         SceneManager.LoadScene(5);
     }
 
+    public void LoadInstructions()
+    {
+        SceneManager.LoadScene(7);
+    }
+
+    public void LoadMenu()
+    {
+        SceneManager.LoadScene(8);
+    }
 }
