@@ -224,6 +224,15 @@ public class SpannerScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Auto-gerenciamento: Detecta bullets do player
+        if (other.GetComponent<BulletScript>() != null)
+        {
+            Destroy(other.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o spanner (1 hit kill)
+            Debug.Log("🔧 Spanner foi eliminado por bullet do player!");
+            return;
+        }
+        
         if (other.CompareTag("Player"))
         {
             // Causa medo

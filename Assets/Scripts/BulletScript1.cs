@@ -18,40 +18,22 @@ public class BulletScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Se colidir com o Boss
-        if (other.CompareTag("Boss"))
+        // TODOS os inimigos agora se auto-gerenciam no OnTriggerEnter2D deles
+        // Boss, PumpkinEnemy, ReaperEnemy, ArcherEnemy, Spanner, Enemy genérico, e EnemySpawner
+        
+        // Se colidir com qualquer inimigo ou boss, eles mesmos tratam
+        if (other.CompareTag("Boss") || 
+            other.CompareTag("Enemy") ||
+            other.GetComponent<PumpkinEnemy>() != null || 
+            other.GetComponent<ReaperEnemy>() != null)
         {
-            Debug.Log("Bullet atingiu o Boss!");
-            Boss boss = other.GetComponent<Boss>();
-            if (boss != null)
-            {
-                boss.TakeDamage(1); // Causa 1 de dano ao Boss
-            }
-            Destroy(gameObject); // Destrói o bullet
+            // Não faz nada - o inimigo se auto-gerencia
+            return;
         }
-        // Se colidir com um inimigo
-        else if (other.CompareTag("Enemy"))
+        
+        // Colisões com objetos do cenário
+        if (other.CompareTag("fase"))
         {
-            Debug.Log("Bullet atingiu inimigo!");
-            
-            // Verifica se é uma PumpkinEnemy (tem sistema de HP)
-            PumpkinEnemy pumpkin = other.GetComponent<PumpkinEnemy>();
-            if (pumpkin != null)
-            {
-                pumpkin.TakeDamage(15f); // Causa dano ao invés de destruir
-                Debug.Log("Bullet causou dano ao Pumpkin!");
-            }
-            // ReaperEnemy gerencia seu próprio dano no OnTriggerEnter2D dele
-            // Então apenas verificamos se NÃO é um Reaper antes de destruir
-            else if (other.GetComponent<ReaperEnemy>() == null)
-            {
-                // Inimigos normais sem HP são destruídos
-                Destroy(other.gameObject);
-            }
-            
-            Destroy(gameObject); // Destrói o bullet
-        }
-        else if (other.CompareTag("fase")) {
             Debug.Log("Bullet colidiu com fase: " + other.gameObject.name);
         }
         // Se colidir com qualquer outro objeto que não seja o player
@@ -64,43 +46,22 @@ public class BulletScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Se colidir com o Boss
-        if (collision.gameObject.CompareTag("Boss"))
+        // TODOS os inimigos agora se auto-gerenciam
+        // Boss, PumpkinEnemy, ReaperEnemy, ArcherEnemy, Spanner, Enemy genérico, e EnemySpawner
+        
+        // Se colidir com qualquer inimigo ou boss, eles mesmos tratam
+        if (collision.gameObject.CompareTag("Boss") || 
+            collision.gameObject.CompareTag("Enemy") ||
+            collision.gameObject.GetComponent<PumpkinEnemy>() != null || 
+            collision.gameObject.GetComponent<ReaperEnemy>() != null)
         {
-            Debug.Log("Bullet atingiu o Boss!");
-            Boss boss = collision.gameObject.GetComponent<Boss>();
-            if (boss != null)
-            {
-                boss.TakeDamage(1); // Causa 1 de dano ao Boss
-            }
-            Destroy(gameObject); // Destrói o bullet
-        }
-        // Se colidir com um inimigo (usando Collision ao invés de Trigger)
-        else if (collision.gameObject.CompareTag("Enemy"))
-        {
-            Debug.Log("Bullet atingiu inimigo!");
-            
-            // Verifica se é uma PumpkinEnemy (tem sistema de HP)
-            PumpkinEnemy pumpkin = collision.gameObject.GetComponent<PumpkinEnemy>();
-            if (pumpkin != null)
-            {
-                pumpkin.TakeDamage(15f); // Causa dano ao invés de destruir
-                Debug.Log("Bullet causou dano ao Pumpkin!");
-            }
-            // ReaperEnemy gerencia seu próprio dano no OnTriggerEnter2D dele
-            // Então apenas verificamos se NÃO é um Reaper antes de destruir
-            else if (collision.gameObject.GetComponent<ReaperEnemy>() == null)
-            {
-                // Inimigos normais sem HP são destruídos
-                Destroy(collision.gameObject);
-            }
-            
-            Destroy(gameObject); // Destrói o bullet
+            // Não faz nada - o inimigo se auto-gerencia
+            return;
         }
 
-        else if (collision.gameObject.CompareTag("wall"))
+        // Colisão com parede
+        if (collision.gameObject.CompareTag("wall"))
         {
-            // Não faz nada, ignora colisão com o player
             Debug.Log("Bullet colidiu com parede: " + collision.gameObject.name);
             Destroy(gameObject); // Destrói apenas o bullet
         }
