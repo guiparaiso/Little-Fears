@@ -211,7 +211,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1828cd2b94978fb46b2eabea7298dea0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathSound: {fileID: 8300000, guid: 75fe12ab09240f6458ea364d9da24362, type: 3}
   target: {fileID: 0}
   speed: 3.5
   stoppingDistance: 1.2
@@ -228,4 +227,3 @@ MonoBehaviour:
   fearOnCollision: 20
   scaryBar: {fileID: 0}
   animator: {fileID: 322648157795931522}
-  objectID: 

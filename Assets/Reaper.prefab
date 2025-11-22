@@ -214,19 +214,11 @@ MonoBehaviour:
   target: {fileID: 0}
   maxHealth: 100
   showHealthBar: 1
-  ambientSound: {fileID: 8300000, guid: bb00e14c6c6b9cf44913d44a587a1737, type: 3}
-  deathSound: {fileID: 0}
-  ambientVolume: 0.5
-  fadeInAmbient: 1
-  fadeInDuration: 1
-  fadeOutOnDeath: 1
-  fadeOutDuration: 0.5
-  maxAudibleDistance: 20
   speed: 3.5
   ragingSpeed: 5
   chaseDistance: 15
   canTeleport: 1
-  teleportCooldown: 3
+  teleportCooldown: 4
   teleportDistance: 2.5
   teleportMinDistance: 1
   teleportWarningDuration: 0.7
@@ -235,7 +227,7 @@ MonoBehaviour:
   teleportFlashColor: {r: 0.5, g: 0, b: 0.5, a: 1}
   teleportWarningColor: {r: 0.4490565, g: 0.42956915, b: 0.42956915, a: 1}
   canCurseGround: 1
-  curseCooldown: 3
+  curseCooldown: 2
   maxCursedAreas: 5
   cursedGroundPrefab: {fileID: 2652667339099605446, guid: 1d7815e800210924499e5e5929d59a41, type: 3}
   curseRadius: 2.5
@@ -256,4 +248,3 @@ MonoBehaviour:
   slashDuration: 1
   scaryBar: {fileID: 0}
   animator: {fileID: 5044869593727616253}
-  objectID: 

@@ -10,17 +10,25 @@ public class GameManager : MonoBehaviour
     public int totalKeys = 0;
     public float currentFear = 0f;
 
-    // Lista para guardar IDs de coisas que j· foram coletadas ou mortas
-    // HashSet È mais r·pido que List para verificar se algo existe
+    [Header("Controle de portas")]
+    // Usado para ignorar o trigger das portas logo ap√≥s carregar a cena,
+    // evitando loop de entra/sai infinito
+    public bool ignoreDoorOnSceneLoad = false;
+
+    // Lista para guardar IDs de coisas que j√° foram coletadas ou mortas
+    // HashSet √© mais r√°pido que List para verificar se algo existe
     private HashSet<string> registeredObjects = new HashSet<string>();
+
+    // Posi√ß√£o salva do player por cena (nome da cena -> posi√ß√£o)
+    private Dictionary<string, Vector3> savedPlayerPositions = new Dictionary<string, Vector3>();
 
     void Awake()
     {
-        // Padr„o Singleton para garantir que sÛ exista UM GameManager
+        // Padr√£o Singleton para garantir que s√≥ exista UM GameManager
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // Isso impede que este objeto seja destruÌdo ao mudar de cena
+            DontDestroyOnLoad(gameObject); // Isso impede que este objeto seja destru√≠do ao mudar de cena
         }
         else
         {
@@ -28,15 +36,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // --- MÈtodos para gerenciar objetos (Inimigos/Chaves) ---
+    // --- M√©todos para gerenciar objetos (Inimigos/Chaves) ---
 
-    // Verifica se um objeto j· foi "registrado" (coletado/morto)
+    // Verifica se um objeto j√° foi "registrado" (coletado/morto)
     public bool IsObjectRegistered(string id)
     {
         return registeredObjects.Contains(id);
     }
 
-    // Registra um objeto para que ele n„o apareÁa mais
+    // Registra um objeto para que ele n√£o apare√ßa mais
     public void RegisterObject(string id)
     {
         if (!registeredObjects.Contains(id))
@@ -45,26 +53,29 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetGame()
-    {
-        // Zera os contadores
-        totalKeys = 0;
-        currentFear = 0f;
+    // --- Posi√ß√£o do player por cena ---
 
-        // LIMPA a lista de objetos mortos/coletados
-        // Isso faz com que todos os inimigos e chaves "renasÁam" na prÛxima cena
-        registeredObjects.Clear();
+    public void SavePlayerPosition(string sceneName, Vector3 position)
+    {
+        savedPlayerPositions[sceneName] = position;
     }
 
+    public bool TryGetPlayerPosition(string sceneName, out Vector3 position)
+    {
+        return savedPlayerPositions.TryGetValue(sceneName, out position);
+    }
+
+    // --- Game Over (chamado pela ScaryBarUI) ---
     public void GameOver()
     {
-        ResetGame();
-        SceneManager.LoadScene(8);
-    }
+        Debug.Log("Game Over!");
 
-    public void GameEnd()
-    {
-        ResetGame();
-        SceneManager.LoadScene(9);
+        // Aqui voc√™ decide o que fazer de fato no game over:
+        // 1) Recarregar a cena atual:
+        // Scene current = SceneManager.GetActiveScene();
+        // SceneManager.LoadScene(current.name);
+
+        // 2) Ou carregar uma cena espec√≠fica de Game Over:
+        // SceneManager.LoadScene("GameOverScene");
     }
 }

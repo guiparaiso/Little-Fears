@@ -171,7 +171,6 @@ public class Boss : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        GameManager.instance.GameEnd();
 
         // Aqui você pode adicionar efeitos de morte, animação, etc.
         // Por exemplo:

@@ -4,22 +4,19 @@ using UnityEngine.InputSystem;
 
 public class ArcherEnemyScript : MonoBehaviour
 {
-    [Header("Death Effect")]
-    [SerializeField] AudioClip deathSound;
-    
     [SerializeField] Transform target;
     [SerializeField] float chaseSpeed = 3f;
     [SerializeField] float retreatSpeed = 5f;
     
     [Header("Distance Settings")]
-    [SerializeField] float shootingRange = 6f;
-    [SerializeField] float tooCloseDistance = 3f;
-    [SerializeField] float maxRange = 10f;
+    [SerializeField] float shootingRange = 6f; // Distância ideal para atirar
+    [SerializeField] float tooCloseDistance = 3f; // Muito perto, precisa recuar
+    [SerializeField] float maxRange = 10f; // Muito longe, precisa perseguir
     
     [Header("Shooting Settings")]
     [SerializeField] GameObject arrowPrefab;
     [SerializeField] float arrowSpeed = 8f;
-    [SerializeField] float shootInterval = 1.5f;
+    [SerializeField] float shootInterval = 1.5f; // Intervalo entre flechas
     
     [Header("Performance")]
     [SerializeField] float pathUpdateInterval = 0.2f;
@@ -37,10 +34,10 @@ public class ArcherEnemyScript : MonoBehaviour
     private float shootTimer = 0f;
     private Vector3 lastVelocity;
     private Vector3 retreatTarget;
-    private bool isDying = false; // Flag para evitar múltiplas mortes
 
     public string objectID;
 
+    // Estados
     private enum State { Chasing, Shooting, Retreating }
     private State currentState = State.Chasing;
 
@@ -51,6 +48,7 @@ public class ArcherEnemyScript : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         
+        // Configurações para evitar colisões entre inimigos
         agent.radius = 0.2f;
         agent.avoidancePriority = Random.Range(40, 60);
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
@@ -67,14 +65,16 @@ public class ArcherEnemyScript : MonoBehaviour
                 target = playerObj.transform;
         }
         
+        // Randomiza timers
         pathUpdateTimer = Random.Range(0f, pathUpdateInterval);
         animationUpdateTimer = Random.Range(0f, animationUpdateInterval);
-        shootTimer = shootInterval;
+        shootTimer = shootInterval; // Começa pronto para atirar
 
         if (GameManager.instance != null)
         {
             if (GameManager.instance.IsObjectRegistered(objectID))
             {
+                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
                 Destroy(gameObject);
             }
         }
@@ -82,15 +82,17 @@ public class ArcherEnemyScript : MonoBehaviour
 
     private void Update()
     {
-        if (isDying) return; // Se está morrendo, não processa nada
         if (target == null || agent == null) return;
+        
         if (!agent.enabled || !agent.isOnNavMesh) return;
 
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
+        // Máquina de estados baseada em distância
         switch (currentState)
         {
             case State.Chasing:
+                // Persegue até atingir a distância ideal de tiro
                 agent.isStopped = false;
                 agent.speed = chaseSpeed;
                 agent.stoppingDistance = shootingRange;
@@ -105,17 +107,20 @@ public class ArcherEnemyScript : MonoBehaviour
                     }
                 }
                 
+                // Quando chega na distância de tiro, muda para atirar
                 if (distanceToTarget <= shootingRange)
                 {
                     currentState = State.Shooting;
-                    shootTimer = 0f;
+                    shootTimer = 0f; // Reseta timer para atirar imediatamente
                 }
                 break;
 
             case State.Shooting:
+                // Para e atira flechas
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
                 
+                // Para todas as animações de movimento
                 if (animator != null)
                 {
                     animator.SetBool("walking_left", false);
@@ -131,13 +136,16 @@ public class ArcherEnemyScript : MonoBehaviour
                     shootTimer = shootInterval;
                 }
                 
+                // Se o player se aproximar demais, recua
                 if (distanceToTarget < tooCloseDistance)
                 {
+                    // Calcula para onde recuar
                     Vector3 directionAway = (transform.position - target.position).normalized;
                     retreatTarget = transform.position + directionAway * (shootingRange - distanceToTarget + 1f);
                     currentState = State.Retreating;
                     agent.isStopped = false;
                 }
+                // Se o player se afastar muito, persegue novamente
                 else if (distanceToTarget > maxRange)
                 {
                     currentState = State.Chasing;
@@ -145,6 +153,7 @@ public class ArcherEnemyScript : MonoBehaviour
                 break;
 
             case State.Retreating:
+                // Recua rapidamente para manter distância
                 agent.isStopped = false;
                 agent.speed = retreatSpeed;
                 agent.stoppingDistance = 0.1f;
@@ -154,14 +163,16 @@ public class ArcherEnemyScript : MonoBehaviour
                     agent.SetDestination(retreatTarget);
                 }
 
+                // Quando atinge distância segura, volta a atirar
                 if (distanceToTarget >= shootingRange * 0.9f || (!agent.pathPending && agent.remainingDistance <= 0.5f))
                 {
                     currentState = State.Shooting;
-                    shootTimer = 0f;
+                    shootTimer = 0f; // Atira logo após recuar
                 }
                 break;
         }
 
+        // Atualiza animação periodicamente (apenas se não estiver no estado Shooting)
         if (currentState != State.Shooting)
         {
             animationUpdateTimer -= Time.deltaTime;
@@ -190,23 +201,32 @@ public class ArcherEnemyScript : MonoBehaviour
 
         Debug.Log("Archer atirando flecha!");
 
+        // Calcula a direção para o player
         Vector2 direction = (target.position - transform.position).normalized;
+
+        // Calcula o ângulo de rotação para a flecha apontar na direção correta
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.Euler(0, 0, angle);
 
+        // Cria a flecha na posição do archer com rotação correta
         GameObject newArrow = Instantiate(arrowPrefab, transform.position, rotation);
 
+        // Configura o Rigidbody2D da flecha
         Rigidbody2D arrowRb = newArrow.GetComponent<Rigidbody2D>();
         if (arrowRb == null)
         {
             arrowRb = newArrow.AddComponent<Rigidbody2D>();
         }
 
+        // Configurações corretas para detectar colisões
         arrowRb.bodyType = RigidbodyType2D.Dynamic;
         arrowRb.gravityScale = 0;
         arrowRb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        
+        // Define a velocidade na direção do player
         arrowRb.linearVelocity = direction * arrowSpeed;
 
+        // Destrói a flecha após 5 segundos
         Destroy(newArrow, 5f);
     }
 
@@ -214,49 +234,55 @@ public class ArcherEnemyScript : MonoBehaviour
     {
         if (animator == null) return;
 
+        // Controle de animações baseado na direção do movimento
         Vector3 velocity = agent.velocity;
         float moveHorizontal = velocity.x;
         float moveVertical = velocity.y;
 
+        // Se está parado (atacando), mantém última direção
         if (velocity.magnitude < 0.1f)
         {
+            // Durante ataque, pode adicionar animação de ataque aqui se tiver
             return;
         }
 
+        // Previne animação diagonal - prioriza o eixo com maior movimento
         if (Mathf.Abs(moveHorizontal) > 0.1f && Mathf.Abs(moveVertical) > 0.1f)
         {
             if (Mathf.Abs(moveHorizontal) >= Mathf.Abs(moveVertical))
             {
-                moveVertical = 0;
+                moveVertical = 0; // Prioriza movimento horizontal
             }
             else
             {
-                moveHorizontal = 0;
+                moveHorizontal = 0; // Prioriza movimento vertical
             }
         }
 
-        if (moveHorizontal < -0.1f)
+        // Movimento horizontal
+        if (moveHorizontal < -0.1f) // Movendo para a esquerda
         {
             animator.SetBool("walking_left", true);
             animator.SetBool("walking_right", false);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
         }
-        else if (moveHorizontal > 0.1f)
+        else if (moveHorizontal > 0.1f) // Movendo para a direita
         {
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", true);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
         }
-        else if (moveVertical > 0.1f)
+        // Movimento vertical
+        else if (moveVertical > 0.1f) // Movendo para cima
         {
             animator.SetBool("walking_up", true);
             animator.SetBool("walking_down", false);
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", false);
         }
-        else if (moveVertical < -0.1f)
+        else if (moveVertical < -0.1f) // Movendo para baixo
         {
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", true);
@@ -265,71 +291,28 @@ public class ArcherEnemyScript : MonoBehaviour
         }
     }
 
-    // MÉTODO NOVO - Gerencia a morte com som
-    private void Die()
-    {
-        if (isDying) return; // Evita morrer múltiplas vezes
-        isDying = true;
-        
-        // Registra no GameManager
-        if (GameManager.instance != null)
-        {
-            GameManager.instance.RegisterObject(objectID);
-        }
-        
-        // Toca som de morte
-        if (deathSound != null)
-        {
-            AudioSource.PlayClipAtPoint(deathSound, transform.position);
-            Debug.Log("🔊 Som de morte do Archer tocando!");
-        }
-        
-        // Esconde visualmente (desativa sprite)
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null)
-        {
-            sr.enabled = false;
-        }
-        
-        // Desativa componentes
-        if (agent != null)
-        {
-            agent.enabled = false;
-        }
-        
-        Collider2D col = GetComponent<Collider2D>();
-        if (col != null)
-        {
-            col.enabled = false;
-        }
-        
-        Debug.Log("🏹 Archer foi eliminado!");
-        
-        // Destrói após um delay (tempo suficiente pro som tocar)
-        Destroy(gameObject, deathSound != null ? deathSound.length : 0.5f);
-    }
-
+    // Auto-gerenciamento: Detecta bullets do player
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isDying) return; // Ignora colisões se já está morrendo
-        
-        // Detecta bullets do player
+        // Detecta bullets do player pelo script BulletScript
         if (other.GetComponent<BulletScript>() != null)
         {
             Destroy(other.gameObject); // Destrói o bullet
-            Die(); // Chama método de morte
+            GameManager.instance.RegisterObject(objectID);
+            Destroy(gameObject); // Destrói o archer (1 hit kill)
+            Debug.Log("🏹 Archer foi eliminado por bullet do player!");
         }
     }
 
+    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (isDying) return; // Ignora colisões se já está morrendo
-        
-        // Detecta bullets do player
+        // Detecta bullets do player pelo script BulletScript
         if (collision.gameObject.GetComponent<BulletScript>() != null)
         {
             Destroy(collision.gameObject); // Destrói o bullet
-            Die(); // Chama método de morte
+            Destroy(gameObject); // Destrói o archer (1 hit kill)
+            Debug.Log("🏹 Archer foi eliminado por bullet do player (Collision)!");
         }
     }
 }
