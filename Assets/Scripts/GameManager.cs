@@ -65,29 +65,27 @@ public class GameManager : MonoBehaviour
         return savedPlayerPositions.TryGetValue(sceneName, out position);
     }
 
-    // --- DERROTA: chamado pela ScaryBarUI ou outros sistemas ---
-    public void GameOver()
+    public void ResetGame()
     {
-        Debug.Log("Game Over!");
+        // Zera os contadores
+        totalKeys = 0;
+        currentFear = 0f;
 
-        // Aqui você decide o que fazer no game over.
-        // Exemplo 1: recarregar a cena atual:
-        // Scene current = SceneManager.GetActiveScene();
-        // SceneManager.LoadScene(current.name);
-
-        // Exemplo 2: carregar uma cena específica:
-        // SceneManager.LoadScene("GameOverScene");
+        // LIMPA a lista de objetos mortos/coletados
+        // Isso faz com que todos os inimigos e chaves "renasçam" na próxima cena
+        registeredObjects.Clear();
+        savedPlayerPositions.Clear();
     }
 
-    // --- VITÓRIA: chamado pelo Boss.cs quando o boss morre ---
+    public void GameOver()
+    {
+        ResetGame();
+        SceneManager.LoadScene(8);
+    }
+
     public void GameEnd()
     {
-        Debug.Log("Game End (vitória)!");
-
-        // Aqui você decide o que acontece quando o jogador vence.
-        // Exemplo: carregar uma cena de vitória:
-        // SceneManager.LoadScene("WinScene");
-
-        // Ou mostrar uma tela de "Você venceu!" com UI, etc.
+        ResetGame();
+        SceneManager.LoadScene(9);
     }
 }
