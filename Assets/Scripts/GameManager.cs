@@ -61,4 +61,10 @@ public class GameManager : MonoBehaviour
         ResetGame();
         SceneManager.LoadScene(8);
     }
+
+    public void GameEnd()
+    {
+        ResetGame();
+        SceneManager.LoadScene(9);
+    }
 }
