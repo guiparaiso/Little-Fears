@@ -11,7 +11,7 @@ public class Boss : MonoBehaviour
     [Header("Shooting Settings")]
     [SerializeField] private GameObject bossBulletPrefab;
     [SerializeField] private float bulletSpeed = 5f;
-    [SerializeField] private float shootInterval = 1f;
+    [SerializeField] private float shootInterval = 0.5f; // Reduzido de 1f para 0.5f (atira 2x mais rápido)
     [SerializeField] private Transform player;
 
     [Header("Float Settings")]
@@ -110,7 +110,6 @@ public class Boss : MonoBehaviour
         // Calcula a direção para o player
         Vector2 direction = (player.position - transform.position).normalized;
         
-        Debug.Log($"🎯 Boss atirando! Posição Boss: {transform.position}, Posição Player: {player.position}, Direção: {direction}");
 
         // Configura o Rigidbody2D do bullet
         Rigidbody2D bulletRb = newBullet.GetComponent<Rigidbody2D>();
@@ -120,14 +119,14 @@ public class Boss : MonoBehaviour
             Debug.Log("⚠️ Boss Bullet não tinha Rigidbody2D - foi adicionado!");
         }
 
+        // IMPORTANTE: Garante que está como Dynamic para aceitar velocidade
+        bulletRb.bodyType = RigidbodyType2D.Dynamic;
         bulletRb.gravityScale = 0;
         bulletRb.constraints = RigidbodyConstraints2D.FreezeRotation;
         bulletRb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
 
         // Define a velocidade na direção do player
         bulletRb.linearVelocity = direction * bulletSpeed;
-        
-        Debug.Log($"💨 Velocidade do bullet: {bulletRb.linearVelocity}, Speed: {bulletSpeed}");
 
         // Destrói o bullet após 5 segundos
         Destroy(newBullet, 5f);
@@ -172,7 +171,6 @@ public class Boss : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        Debug.Log("Boss derrotado!");
 
         // Aqui você pode adicionar efeitos de morte, animação, etc.
         // Por exemplo:
