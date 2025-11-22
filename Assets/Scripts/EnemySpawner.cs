@@ -487,6 +487,18 @@ public class EnemySpawner : MonoBehaviour
         Destroy(indicator);
     }
 
+    // Auto-gerenciamento: Spawner pode ser destruído por bullets
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (other.GetComponent<BulletScript>() != null)
+        {
+            Destroy(other.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o spawner
+            Debug.Log("🏭 Spawner foi destruído por bullet do player!");
+        }
+    }
+
     private void OnDrawGizmosSelected()
     {
         if (useRandomSpawn)

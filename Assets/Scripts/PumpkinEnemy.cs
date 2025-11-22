@@ -372,30 +372,16 @@ public class PumpkinEnemy : MonoBehaviour
         }
     }
     
-    // Método opcional para dano por colisão - configure as tags no Unity depois
+    // Auto-gerenciamento: Detecta bullets do player
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ignora se o bullet já vai chamar TakeDamage através do BulletScript
-        // Este método agora é redundante, mas mantemos como fallback
-        
-        /* CÓDIGO REMOVIDO - Agora o BulletScript chama TakeDamage diretamente
-        if (other.gameObject.layer != gameObject.layer && !other.CompareTag("Player") && !other.CompareTag("Enemy"))
+        // Detecta bullets do player pelo script BulletScript
+        if (other.GetComponent<BulletScript>() != null)
         {
-            var bulletScript = other.GetComponent<BulletScript>();
-            if (bulletScript != null)
-            {
-                TakeDamage(15f);
-                Debug.Log("Abóbora foi atingida por projétil!");
-                return;
-            }
-            
-            if (other.name.Contains("Bullet") || other.name.Contains("Projectile") || other.name.Contains("bullet"))
-            {
-                TakeDamage(15f);
-                Debug.Log("Abóbora foi atingida por projétil!");
-            }
+            TakeDamage(15f); // Causa 15 de dano à Abóbora
+            Destroy(other.gameObject); // Destrói o bullet
+            Debug.Log("💥 Abóbora foi atingida por bullet do player!");
         }
-        */
     }
     
     System.Collections.IEnumerator DamageFlash()

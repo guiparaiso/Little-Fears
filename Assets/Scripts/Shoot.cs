@@ -27,7 +27,6 @@ public class Shoot : MonoBehaviour
 
     public void Fire()
     {
-        Debug.Log("Pew Pew!");
 
         if (bulletPrefab == null || playerMovement == null)
         {
