@@ -28,7 +28,7 @@ public class BulletScript : MonoBehaviour
             other.GetComponent<ReaperEnemy>() != null)
         {
             // Não faz nada - o inimigo se auto-gerencia
-            Debug.Log("Bullet atingiu inimigo: " + other.name + " - Deixa o inimigo se auto-gerenciar.");
+            //Debug.Log("Bullet atingiu inimigo: " + other.name + " - Deixa o inimigo se auto-gerenciar.");
             return;
         }
         
@@ -57,7 +57,7 @@ public class BulletScript : MonoBehaviour
             collision.gameObject.GetComponent<ReaperEnemy>() != null)
         {
             // Não faz nada - o inimigo se auto-gerencia
-            Debug.Log("Bullet atingiu inimigo (Collision): " + collision.gameObject.name + " - Deixa o inimigo se auto-gerenciar.");
+            //Debug.Log("Bullet atingiu inimigo (Collision): " + collision.gameObject.name + " - Deixa o inimigo se auto-gerenciar.");
             return;
         }
 
