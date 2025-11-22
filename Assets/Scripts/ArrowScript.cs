@@ -63,7 +63,7 @@ public class ArrowScript : MonoBehaviour
         }
         
         // Se colidir com qualquer outro objeto que não seja Enemy ou Boss
-        if (!other.CompareTag("Enemy") && !other.CompareTag("Boss") && !other.CompareTag("Player") && !other.CompareTag("Arrow"))
+        if (!other.CompareTag("Enemy") && !other.CompareTag("Boss") && !other.CompareTag("Player") && !other.CompareTag("Arrow") && !other.name.Contains("CursedGroundArea(Clone)") && !other.name.Contains("limit"))
         {
             Debug.Log("Flecha colidiu com parede (Trigger): " + other.name);
             StickToWall(); // Gruda na parede
