@@ -898,7 +898,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 43fac5b2
+  m_ApplyToSortingLayers: 43fac5b20d635d60
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -2050,88 +2050,6 @@ MonoBehaviour:
   m_Area: 1
   m_IgnoreFromBuild: 0
   m_AffectedAgents: ffffffff
---- !u!1001 &755742463
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 610709958381789333, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 208952853}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -7.32
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.92
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1249173254308913135, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      propertyPath: m_Name
-      value: Reaper_cozinha
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 755742465}
-  m_SourcePrefab: {fileID: 100100000, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
---- !u!1 &755742464 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3700279453481728741, guid: f6380ca4851a5b348aad6c274c3823fe, type: 3}
-  m_PrefabInstance: {fileID: 755742463}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &755742465
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 755742464}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: Reaper_0_cozinha
 --- !u!1 &794680566
 GameObject:
   m_ObjectHideFlags: 0
@@ -4384,10 +4302,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1789264402}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
+  m_Script: {fileID: 11500000, guid: 13b4aa3e0c77ef44c982f5f5c5dc7888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectID: Key_cozinha
+  keyID: key_cozinha
 --- !u!1 &1946323614
 GameObject:
   m_ObjectHideFlags: 0
@@ -4676,6 +4594,10 @@ MonoBehaviour:
   panicColor: {r: 1, g: 0, b: 0, a: 1}
   tenseThreshold: 0.3
   panicThreshold: 0.7
+  playerSpriteRenderer: {fileID: 0}
+  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
+  flashCount: 2
   audioSource: {fileID: 0}
   onFilledClip: {fileID: 0}
   onScaryBarFilled:
@@ -4853,6 +4775,63 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1001 &2032362576
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -7.7200003
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -5.46
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1249173254308913135, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3700279453481728741, guid: 348997b66a5110d4a90392e304894a82, type: 3}
+      propertyPath: m_Name
+      value: Reaper_cozinha
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 348997b66a5110d4a90392e304894a82, type: 3}
 --- !u!1 &2051191801
 GameObject:
   m_ObjectHideFlags: 0
@@ -5155,6 +5134,6 @@ SceneRoots:
   - {fileID: 1586106293}
   - {fileID: 1078312177}
   - {fileID: 1174958353}
-  - {fileID: 755742463}
   - {fileID: 1725250208}
   - {fileID: 8320731}
+  - {fileID: 2032362576}

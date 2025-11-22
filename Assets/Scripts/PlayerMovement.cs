@@ -105,12 +105,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "Key")
-        {
-            KeyManager.instance.AddKey();
-            Destroy(other.gameObject);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.tag == "Key")
+    //    {
+    //        KeyManager.instance.AddKey();
+    //        Destroy(other.gameObject);
+    //    }
+    //}
 }
