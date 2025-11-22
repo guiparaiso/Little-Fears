@@ -26,7 +26,7 @@ public class BossBulletScript : MonoBehaviour
             Destroy(gameObject); // Destrói apenas o bullet
         }
         // Se colidir com qualquer outro objeto que não seja o Boss
-        else if (!other.CompareTag("Boss"))
+        else if (!other.CompareTag("Enemy") && !other.CompareTag("Boss") && !other.CompareTag("Player") && !other.CompareTag("Arrow") && !other.name.Contains("CursedGroundArea(Clone)") && !other.name.Contains("limit"))
         {
             Destroy(gameObject); // Destrói apenas o bullet
         }

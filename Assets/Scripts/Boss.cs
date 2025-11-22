@@ -83,11 +83,11 @@ public class Boss : MonoBehaviour
         // Incrementa o timer de flutuação
         floatTimer += Time.deltaTime * floatSpeed;
 
-        // Calcula a nova posição Y usando seno para movimento suave
-        float newY = startPosition.y + Mathf.Sin(floatTimer) * floatAmplitude;
+        // Calcula a nova posição X usando seno para movimento suave
+        float newX = startPosition.x + Mathf.Sin(floatTimer) * floatAmplitude;
 
-        // Aplica a nova posição mantendo X e Z constantes
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        // Aplica a nova posição mantendo Y e Z constantes
+        transform.position = new Vector3(newX, startPosition.y, startPosition.z);
     }
 
     void ShootAtPlayer()
@@ -109,12 +109,15 @@ public class Boss : MonoBehaviour
 
         // Calcula a direção para o player
         Vector2 direction = (player.position - transform.position).normalized;
+        
+        Debug.Log($"🎯 Boss atirando! Posição Boss: {transform.position}, Posição Player: {player.position}, Direção: {direction}");
 
         // Configura o Rigidbody2D do bullet
         Rigidbody2D bulletRb = newBullet.GetComponent<Rigidbody2D>();
         if (bulletRb == null)
         {
             bulletRb = newBullet.AddComponent<Rigidbody2D>();
+            Debug.Log("⚠️ Boss Bullet não tinha Rigidbody2D - foi adicionado!");
         }
 
         bulletRb.gravityScale = 0;
@@ -123,6 +126,8 @@ public class Boss : MonoBehaviour
 
         // Define a velocidade na direção do player
         bulletRb.linearVelocity = direction * bulletSpeed;
+        
+        Debug.Log($"💨 Velocidade do bullet: {bulletRb.linearVelocity}, Speed: {bulletSpeed}");
 
         // Destrói o bullet após 5 segundos
         Destroy(newBullet, 5f);
@@ -186,6 +191,18 @@ public class Boss : MonoBehaviour
             TakeDamage(1); // Causa 1 de dano ao Boss
             Destroy(other.gameObject); // Destrói o bullet
             Debug.Log("Boss foi atingido por bullet do player!");
+        }
+    }
+
+    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (collision.gameObject.GetComponent<BulletScript>() != null)
+        {
+            TakeDamage(1); // Causa 1 de dano ao Boss
+            Destroy(collision.gameObject); // Destrói o bullet
+            Debug.Log("Boss foi atingido por bullet do player (Collision)!");
         }
     }
 }

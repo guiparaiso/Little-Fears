@@ -461,7 +461,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         currentEnemyCount++;
-        Debug.Log($"Slave spawned! Total: {currentEnemyCount}");
+        //Debug.Log($"Slave spawned! Total: {currentEnemyCount}");
 
         if (flashOnSpawn)
         {
@@ -498,6 +498,18 @@ public class EnemySpawner : MonoBehaviour
             Destroy(other.gameObject); // Destrói o bullet
             Destroy(gameObject); // Destrói o spawner
             Debug.Log("🏭 Spawner foi destruído por bullet do player!");
+        }
+    }
+
+    // Auto-gerenciamento: Spawner pode ser destruído por bullets (versão Collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (collision.gameObject.GetComponent<BulletScript>() != null)
+        {
+            Destroy(collision.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o spawner
+            Debug.Log("🏭 Spawner foi destruído por bullet do player (Collision)!");
         }
     }
 
