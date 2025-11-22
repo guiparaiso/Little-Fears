@@ -72,7 +72,7 @@ public class PoisonProjectile : MonoBehaviour
             Destroy(gameObject);
         }
         // Se acertou qualquer coisa que não seja inimigo (parede, obstáculo)
-        else if (!other.CompareTag("Enemy"))
+        else if (!other.CompareTag("Enemy") && !other.CompareTag("Boss") && !other.CompareTag("Player") && !other.CompareTag("Arrow") && !other.name.Contains("CursedGroundArea(Clone)") && !other.name.Contains("limit"))
         {
             Debug.Log("Veneno colidiu com: " + other.name);
             
