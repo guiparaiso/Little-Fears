@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayer: 3
   m_SortingOrder: 10
   m_Sprite: {fileID: 1803254234891847947, guid: 72a1bfd207122744fb1a147fd9a8a914, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5620489, g: 0.028657813, b: 0.6603774, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -126,4 +126,4 @@ MonoBehaviour:
   fadeOut: 1
   rotateTowardsTarget: 1
   rotationOffset: 0
-  slashColor: {r: 1, g: 1, b: 1, a: 1}
+  slashColor: {r: 0.5178255, g: 0.024296915, b: 0.735849, a: 1}
