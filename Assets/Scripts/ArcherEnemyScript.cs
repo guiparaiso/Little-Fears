@@ -303,4 +303,16 @@ public class ArcherEnemyScript : MonoBehaviour
             Debug.Log("🏹 Archer foi eliminado por bullet do player!");
         }
     }
+
+    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (collision.gameObject.GetComponent<BulletScript>() != null)
+        {
+            Destroy(collision.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o archer (1 hit kill)
+            Debug.Log("🏹 Archer foi eliminado por bullet do player (Collision)!");
+        }
+    }
 }

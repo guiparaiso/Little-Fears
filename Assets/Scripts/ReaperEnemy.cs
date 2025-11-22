@@ -685,6 +685,19 @@ public class ReaperEnemy : MonoBehaviour
         }
     }
     
+    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (collision.gameObject.GetComponent<BulletScript>() != null)
+        {
+            float damage = 10f; // Dano do bullet
+            TakeDamage(damage);
+            Destroy(collision.gameObject); // Destrói o bullet
+            Debug.Log("💀 Reaper foi atingido por bullet do player (Collision)!");
+        }
+    }
+    
     // OnGUI para mostrar barra de HP (simples)
     private void OnGUI()
     {

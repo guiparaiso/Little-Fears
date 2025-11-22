@@ -383,6 +383,18 @@ public class PumpkinEnemy : MonoBehaviour
             Debug.Log("💥 Abóbora foi atingida por bullet do player!");
         }
     }
+
+    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (collision.gameObject.GetComponent<BulletScript>() != null)
+        {
+            TakeDamage(15f); // Causa 15 de dano à Abóbora
+            Destroy(collision.gameObject); // Destrói o bullet
+            Debug.Log("💥 Abóbora foi atingida por bullet do player (Collision)!");
+        }
+    }
     
     System.Collections.IEnumerator DamageFlash()
     {
