@@ -365,7 +365,7 @@ MonoBehaviour:
   filledImage: {fileID: 1613248892}
   maxFear: 100
   fillSmoothing: 6
-  decayPerSecond: 0
+  decayPerSecond: 5
   clampToZero: 1
   normalColor: {r: 0.44313726, g: 0.21568628, b: 0.6666667, a: 1}
   tenseColor: {r: 0.44313726, g: 0.21568628, b: 0.6666667, a: 1}
@@ -393,6 +393,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7528864313221493273, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
+      propertyPath: objectID
+      value: arrow_4_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
       propertyPath: m_Name
       value: ArrowEnemy_4_banheiro
@@ -444,29 +448,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 251578710}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
---- !u!1 &251578709 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-  m_PrefabInstance: {fileID: 251578708}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &251578710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 251578709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &288511887
 GameObject:
   m_ObjectHideFlags: 0
@@ -1430,7 +1413,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8560012155852305115, guid: c5bafd6125d9a30489398d6ba446e765, type: 3}
       propertyPath: m_SortingLayer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8560012155852305115, guid: c5bafd6125d9a30489398d6ba446e765, type: 3}
       propertyPath: m_SortingLayerID
@@ -1629,6 +1612,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7006491086648319330, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      propertyPath: objectID
+      value: slave_0_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
       value: Slaves_banheiro
@@ -1680,29 +1667,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 633538047}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
---- !u!1 &633538046 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
-  m_PrefabInstance: {fileID: 633538045}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &633538047
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 633538046}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &657878927
 GameObject:
   m_ObjectHideFlags: 0
@@ -2392,6 +2358,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7006491086648319330, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
+      propertyPath: objectID
+      value: slave_1_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
       propertyPath: m_Name
       value: Slaves_1_banheiro
@@ -2443,29 +2413,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 850102805}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
---- !u!1 &850102804 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3772195534717383998, guid: 899e9619163d8a54f977e3f5620599d1, type: 3}
-  m_PrefabInstance: {fileID: 850102803}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &850102805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 850102804}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &878219875
 GameObject:
   m_ObjectHideFlags: 0
@@ -3766,6 +3715,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7528864313221493273, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
+      propertyPath: objectID
+      value: arrow_1_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
       propertyPath: m_Name
       value: ArrowEnemy_1_banheiro
@@ -3817,29 +3770,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1564097673}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
---- !u!1 &1564097672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-  m_PrefabInstance: {fileID: 1564097671}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1564097673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1564097672}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1001 &1584260677
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3852,6 +3784,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7528864313221493273, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
+      propertyPath: objectID
+      value: arrow_3_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
       propertyPath: m_Name
       value: ArrowEnemy_3_banheiro
@@ -3903,29 +3839,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1584260679}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
---- !u!1 &1584260678 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-  m_PrefabInstance: {fileID: 1584260677}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1584260679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1584260678}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &1609538362
 GameObject:
   m_ObjectHideFlags: 0
@@ -4088,6 +4003,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7528864313221493273, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
+      propertyPath: objectID
+      value: arrow_2_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
       propertyPath: m_Name
       value: ArrowEnemy_2_banheiro
@@ -4139,29 +4058,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1626026380}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
---- !u!1 &1626026379 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-  m_PrefabInstance: {fileID: 1626026378}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1626026380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1626026379}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &1644258955
 GameObject:
   m_ObjectHideFlags: 0
@@ -4476,6 +4374,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 531495538}
+    - target: {fileID: -7528864313221493273, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
+      propertyPath: objectID
+      value: arrow_0_banheiro
+      objectReference: {fileID: 0}
     - target: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
       propertyPath: m_Name
       value: ArrowEnemy_banheiro
@@ -4527,29 +4429,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1817487021}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
---- !u!1 &1817487020 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4180391043313492478, guid: 0e65b2e0496b3c946bdef7cb956cea05, type: 3}
-  m_PrefabInstance: {fileID: 1817487019}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1817487021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1817487020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9821067bcaab1e34586b60035db9025e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectID: 
 --- !u!1 &1997376937
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -33,7 +34,9 @@ public class SpannerScript : MonoBehaviour
     private float attackTimer = 0f;
     private Vector3 lastVelocity;
     private Vector3 retreatTarget;
-    
+
+    public string objectID;
+
     // Estados
     private enum State { Chasing, Attacking, Retreating }
     private State currentState = State.Chasing;
@@ -48,7 +51,7 @@ public class SpannerScript : MonoBehaviour
         
         // Configurações para evitar colisões entre inimigos
         agent.radius = 0.2f; // Reduz o radius para caber mais
-        agent.avoidancePriority = Random.Range(40, 60); // Prioridade aleatória para não travarem
+        agent.avoidancePriority = UnityEngine.Random.Range(40, 60); // Prioridade aleatória para não travarem
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Ativa desvio
 
         if (scaryBar == null)
@@ -64,8 +67,17 @@ public class SpannerScript : MonoBehaviour
         }
         
         // Randomiza timers para não todos atualizarem ao mesmo tempo
-        pathUpdateTimer = Random.Range(0f, pathUpdateInterval);
-        animationUpdateTimer = Random.Range(0f, animationUpdateInterval);
+        pathUpdateTimer = UnityEngine.Random.Range(0f, pathUpdateInterval);
+        animationUpdateTimer = UnityEngine.Random.Range(0f, animationUpdateInterval);
+
+        if (GameManager.instance != null)
+        {
+            if (GameManager.instance.IsObjectRegistered(objectID))
+            {
+                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void Update()
@@ -228,6 +240,7 @@ public class SpannerScript : MonoBehaviour
         if (other.GetComponent<BulletScript>() != null)
         {
             Destroy(other.gameObject); // Destrói o bullet
+            GameManager.instance.RegisterObject(objectID);
             Destroy(gameObject); // Destrói o spanner (1 hit kill)
             Debug.Log("🔧 Spanner foi eliminado por bullet do player!");
             return;

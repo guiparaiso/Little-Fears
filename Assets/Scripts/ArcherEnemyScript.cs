@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 public class ArcherEnemyScript : MonoBehaviour
 {
@@ -33,7 +34,9 @@ public class ArcherEnemyScript : MonoBehaviour
     private float shootTimer = 0f;
     private Vector3 lastVelocity;
     private Vector3 retreatTarget;
-    
+
+    public string objectID;
+
     // Estados
     private enum State { Chasing, Shooting, Retreating }
     private State currentState = State.Chasing;
@@ -66,6 +69,15 @@ public class ArcherEnemyScript : MonoBehaviour
         pathUpdateTimer = Random.Range(0f, pathUpdateInterval);
         animationUpdateTimer = Random.Range(0f, animationUpdateInterval);
         shootTimer = shootInterval; // Começa pronto para atirar
+
+        if (GameManager.instance != null)
+        {
+            if (GameManager.instance.IsObjectRegistered(objectID))
+            {
+                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void Update()
@@ -286,6 +298,7 @@ public class ArcherEnemyScript : MonoBehaviour
         if (other.GetComponent<BulletScript>() != null)
         {
             Destroy(other.gameObject); // Destrói o bullet
+            GameManager.instance.RegisterObject(objectID);
             Destroy(gameObject); // Destrói o archer (1 hit kill)
             Debug.Log("🏹 Archer foi eliminado por bullet do player!");
         }

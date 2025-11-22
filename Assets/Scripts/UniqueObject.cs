@@ -11,7 +11,7 @@ public class UniqueObject : MonoBehaviour
         if (GameManager.instance.IsObjectRegistered(objectID))
         {
             // Se sim, se destrói imediatamente antes do jogador ver
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 

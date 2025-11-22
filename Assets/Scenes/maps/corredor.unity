@@ -3422,7 +3422,7 @@ MonoBehaviour:
   filledImage: {fileID: 971873453}
   maxFear: 100
   fillSmoothing: 6
-  decayPerSecond: 0
+  decayPerSecond: 5
   clampToZero: 1
   normalColor: {r: 0.44313726, g: 0.21568628, b: 0.6666667, a: 1}
   tenseColor: {r: 0.44313726, g: 0.21568628, b: 0.6666667, a: 1}

@@ -78,6 +78,8 @@ public class ReaperEnemy : MonoBehaviour
     private enum ReaperState { Idle, Chasing, Attacking, Retreating, Teleporting, Cursing }
     private ReaperState currentState = ReaperState.Chasing;
 
+    public string objectID;
+
     private void Start()
     {
         // Configura NavMeshAgent
@@ -118,6 +120,15 @@ public class ReaperEnemy : MonoBehaviour
         teleportTimer = Random.Range(teleportCooldown * 0.3f, teleportCooldown * 0.7f);
         curseTimer = Random.Range(curseCooldown * 0.3f, curseCooldown * 0.7f);
         meleeAttackTimer = meleeAttackCooldown; // Pode atacar imediatamente
+
+        if (GameManager.instance != null)
+        {
+            if (GameManager.instance.IsObjectRegistered(objectID))
+            {
+                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
+                Destroy(gameObject);
+            }
+        }
     }
 
     private void Update()
@@ -529,7 +540,9 @@ public class ReaperEnemy : MonoBehaviour
     private void Die()
     {
         Debug.Log("💀☠️ REAPER FOI DERROTADO!");
-        
+
+        GameManager.instance.RegisterObject(objectID);
+
         // Efeito de morte (pode adicionar partículas, som, etc)
         if (teleportEffectPrefab != null)
         {
