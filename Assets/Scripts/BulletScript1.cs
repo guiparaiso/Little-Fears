@@ -41,7 +41,9 @@ public class BulletScript : MonoBehaviour
                 pumpkin.TakeDamage(15f); // Causa dano ao invés de destruir
                 Debug.Log("Bullet causou dano ao Pumpkin!");
             }
-            else
+            // ReaperEnemy gerencia seu próprio dano no OnTriggerEnter2D dele
+            // Então apenas verificamos se NÃO é um Reaper antes de destruir
+            else if (other.GetComponent<ReaperEnemy>() == null)
             {
                 // Inimigos normais sem HP são destruídos
                 Destroy(other.gameObject);
@@ -53,7 +55,7 @@ public class BulletScript : MonoBehaviour
             Debug.Log("Bullet colidiu com fase: " + other.gameObject.name);
         }
         // Se colidir com qualquer outro objeto que não seja o player
-        else if (!other.CompareTag("Player") && !other.name.Contains("limit"))
+        else if (!other.CompareTag("Player") && !other.name.Contains("limit") && !other.name.Contains("CursedGroundArea(Clone)"))
         {
             Debug.Log("Bullet colidiu com: " + other.name);
             Destroy(gameObject); // Destrói apenas o bullet
@@ -77,7 +79,22 @@ public class BulletScript : MonoBehaviour
         else if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Bullet atingiu inimigo!");
-            Destroy(collision.gameObject); // Destrói o inimigo
+            
+            // Verifica se é uma PumpkinEnemy (tem sistema de HP)
+            PumpkinEnemy pumpkin = collision.gameObject.GetComponent<PumpkinEnemy>();
+            if (pumpkin != null)
+            {
+                pumpkin.TakeDamage(15f); // Causa dano ao invés de destruir
+                Debug.Log("Bullet causou dano ao Pumpkin!");
+            }
+            // ReaperEnemy gerencia seu próprio dano no OnTriggerEnter2D dele
+            // Então apenas verificamos se NÃO é um Reaper antes de destruir
+            else if (collision.gameObject.GetComponent<ReaperEnemy>() == null)
+            {
+                // Inimigos normais sem HP são destruídos
+                Destroy(collision.gameObject);
+            }
+            
             Destroy(gameObject); // Destrói o bullet
         }
 
