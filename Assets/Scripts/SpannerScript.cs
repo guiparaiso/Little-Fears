@@ -1,26 +1,29 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 public class SpannerScript : MonoBehaviour
 {
+    [Header("Death Effect")]
+    [SerializeField] AudioClip deathSound;
     [SerializeField] Transform target;
     [SerializeField] float speed = 3.5f;
-    [SerializeField] float stoppingDistance = 1.5f; // Reduzido para não ficar em cima do player
+    [SerializeField] float stoppingDistance = 1.5f;
     
     [Header("Attack Behavior")]
-    [SerializeField] float retreatDistance = 2f; // Distância para recuar após ataque (em unidades)
-    [SerializeField] float attackDuration = 0.3f; // Tempo pausado durante ataque (em segundos)
-    [SerializeField] float retreatSpeed = 5f; // Velocidade do recuo
-    [SerializeField] bool useAttackAnimation = true; // Ativa animação de ataque
-    [SerializeField] GameObject slashEffectPrefab; // Prefab do efeito de slash
-    [SerializeField] Vector3 slashOffset = Vector3.zero; // Offset da posição do slash
-    [SerializeField] float slashScale = 2f; // Tamanho do slash (1 = tamanho original)
-    [SerializeField] float slashDuration = 0.5f; // Duração do efeito de slash em segundos (diferente do attackDuration)
+    [SerializeField] float retreatDistance = 2f;
+    [SerializeField] float attackDuration = 0.3f;
+    [SerializeField] float retreatSpeed = 5f;
+    [SerializeField] bool useAttackAnimation = true;
+    [SerializeField] GameObject slashEffectPrefab;
+    [SerializeField] Vector3 slashOffset = Vector3.zero;
+    [SerializeField] float slashScale = 2f;
+    [SerializeField] float slashDuration = 0.5f;
     
     [Header("Performance")]
-    [SerializeField] float pathUpdateInterval = 0.2f; // Atualiza destino a cada 0.2s
-    [SerializeField] float animationUpdateInterval = 0.1f; // Atualiza animação a cada 0.1s
+    [SerializeField] float pathUpdateInterval = 0.2f;
+    [SerializeField] float animationUpdateInterval = 0.1f;
 
     [Header("Fear Settings")]
     [SerializeField] float fearOnCollision = 20f;
@@ -34,10 +37,10 @@ public class SpannerScript : MonoBehaviour
     private float attackTimer = 0f;
     private Vector3 lastVelocity;
     private Vector3 retreatTarget;
+    private bool isDying = false; // Flag para evitar múltiplas mortes
 
     public string objectID;
 
-    // Estados
     private enum State { Chasing, Attacking, Retreating }
     private State currentState = State.Chasing;
 
@@ -49,10 +52,9 @@ public class SpannerScript : MonoBehaviour
         agent.updateUpAxis = false;
         agent.stoppingDistance = stoppingDistance;
         
-        // Configurações para evitar colisões entre inimigos
-        agent.radius = 0.2f; // Reduz o radius para caber mais
-        agent.avoidancePriority = UnityEngine.Random.Range(40, 60); // Prioridade aleatória para não travarem
-        agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance; // Ativa desvio
+        agent.radius = 0.2f;
+        agent.avoidancePriority = UnityEngine.Random.Range(40, 60);
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
 
         if (scaryBar == null)
         {
@@ -66,7 +68,6 @@ public class SpannerScript : MonoBehaviour
                 target = playerObj.transform;
         }
         
-        // Randomiza timers para não todos atualizarem ao mesmo tempo
         pathUpdateTimer = UnityEngine.Random.Range(0f, pathUpdateInterval);
         animationUpdateTimer = UnityEngine.Random.Range(0f, animationUpdateInterval);
 
@@ -74,7 +75,6 @@ public class SpannerScript : MonoBehaviour
         {
             if (GameManager.instance.IsObjectRegistered(objectID))
             {
-                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
                 Destroy(gameObject);
             }
         }
@@ -82,22 +82,18 @@ public class SpannerScript : MonoBehaviour
 
     private void Update()
     {
+        if (isDying) return; // Se está morrendo, não processa nada
         if (target == null || agent == null) return;
-        
-        // Verifica se o agent está ativo e no NavMesh antes de tentar usar
         if (!agent.enabled || !agent.isOnNavMesh) return;
 
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
 
-        // Máquina de estados (IGUAL AO ENEMY.CS)
         switch (currentState)
         {
             case State.Chasing:
-                // Persegue o player
                 agent.isStopped = false;
                 agent.speed = speed;
                 
-                // Atualiza destino periodicamente
                 pathUpdateTimer -= Time.deltaTime;
                 if (pathUpdateTimer <= 0f)
                 {
@@ -108,26 +104,22 @@ public class SpannerScript : MonoBehaviour
                     }
                 }
                 
-                // stoppingDistance = 0 para colar no player
                 agent.stoppingDistance = 0f;
                 break;
 
             case State.Attacking:
-                // PARA completamente durante ataque
                 agent.isStopped = true;
                 agent.velocity = Vector3.zero;
                 attackTimer += Time.deltaTime;
                 
                 if (attackTimer >= attackDuration)
                 {
-                    // Calcula para onde recuar
                     Vector3 directionAway = (transform.position - target.position).normalized;
                     retreatTarget = transform.position + directionAway * retreatDistance;
                     
                     currentState = State.Retreating;
                     agent.isStopped = false;
                     
-                    // Reseta animações de ataque
                     if (useAttackAnimation && animator != null)
                     {
                         animator.SetBool("attacking", false);
@@ -136,9 +128,8 @@ public class SpannerScript : MonoBehaviour
                 break;
 
             case State.Retreating:
-                // Recua RAPIDAMENTE para longe
                 agent.isStopped = false;
-                agent.speed = retreatSpeed; // Mais rápido que perseguição
+                agent.speed = retreatSpeed;
                 agent.stoppingDistance = 0.1f;
                 
                 if (agent.isOnNavMesh)
@@ -146,7 +137,6 @@ public class SpannerScript : MonoBehaviour
                     agent.SetDestination(retreatTarget);
                 }
 
-                // Volta a perseguir quando chega perto do destino de recuo
                 if (!agent.pathPending && agent.remainingDistance <= 0.5f)
                 {
                     currentState = State.Chasing;
@@ -154,7 +144,6 @@ public class SpannerScript : MonoBehaviour
                 break;
         }
 
-        // Atualiza animação apenas periodicamente
         animationUpdateTimer -= Time.deltaTime;
         if (animationUpdateTimer <= 0f)
         {
@@ -168,7 +157,6 @@ public class SpannerScript : MonoBehaviour
     {
         if (animator == null) return;
         
-        // Se está atacando, mostra animação de ataque (slash genérico)
         if (currentState == State.Attacking && useAttackAnimation)
         {
             animator.SetBool("attacking", true);
@@ -182,7 +170,6 @@ public class SpannerScript : MonoBehaviour
         float moveHorizontal = lastVelocity.x;
         float moveVertical = lastVelocity.y;
 
-        // Previne animação diagonal - prioriza o eixo com maior movimento
         if (Mathf.Abs(moveHorizontal) > 0.1f && Mathf.Abs(moveVertical) > 0.1f)
         {
             if (Mathf.Abs(moveHorizontal) >= Mathf.Abs(moveVertical))
@@ -195,7 +182,6 @@ public class SpannerScript : MonoBehaviour
             }
         }
 
-        // Movimento horizontal
         if (moveHorizontal < -0.1f)
         {
             animator.SetBool("walking_left", true);
@@ -210,7 +196,6 @@ public class SpannerScript : MonoBehaviour
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
         }
-        // Movimento vertical
         else if (moveVertical > 0.1f)
         {
             animator.SetBool("walking_up", true);
@@ -225,7 +210,7 @@ public class SpannerScript : MonoBehaviour
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", false);
         }
-        else // Parado
+        else
         {
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", false);
@@ -234,47 +219,82 @@ public class SpannerScript : MonoBehaviour
         }
     }
 
+    // MÉTODO NOVO - Gerencia a morte com som
+    private void Die()
+    {
+        if (isDying) return; // Evita morrer múltiplas vezes
+        isDying = true;
+        
+        // Registra no GameManager
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.RegisterObject(objectID);
+        }
+        
+        // Toca som de morte
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+            Debug.Log("🔊 Som de morte do Spanner tocando!");
+        }
+        
+        // Esconde visualmente (desativa sprite)
+        SpriteRenderer sr = GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            sr.enabled = false;
+        }
+        
+        // Desativa componentes
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
+        
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+        
+        Debug.Log("🔧 Spanner foi eliminado!");
+        
+        // Destrói após um delay (tempo suficiente pro som tocar)
+        Destroy(gameObject, deathSound != null ? deathSound.length : 0.5f);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Auto-gerenciamento: Detecta bullets do player
+        if (isDying) return; // Ignora colisões se já está morrendo
+        
+        // Detecta bullets do player
         if (other.GetComponent<BulletScript>() != null)
         {
             Destroy(other.gameObject); // Destrói o bullet
-            GameManager.instance.RegisterObject(objectID);
-            Destroy(gameObject); // Destrói o spanner (1 hit kill)
-            Debug.Log("🔧 Spanner foi eliminado por bullet do player!");
+            Die(); // Chama método de morte
             return;
         }
         
         if (other.CompareTag("Player"))
         {
-            // Causa medo
             if (scaryBar != null)
             {
                 scaryBar.AddFear(fearOnCollision);
                 Debug.Log("Spanner causou medo!");
             }
             
-            // Inicia ataque e recuo (IGUAL AO ENEMY.CS)
             currentState = State.Attacking;
             attackTimer = 0f;
             
-            // Instancia efeito de slash
             if (useAttackAnimation && slashEffectPrefab != null)
             {
-                // Cria o slash na posição do PLAYER (other), não do inimigo
                 Vector3 slashPosition = other.transform.position + slashOffset;
                 GameObject slash = Instantiate(slashEffectPrefab, slashPosition, Quaternion.identity);
-                
-                // Garante que está no layer correto e na posição Z correta
                 slash.transform.position = new Vector3(slashPosition.x, slashPosition.y, other.transform.position.z - 0.1f);
-                
-                // Aplica o tamanho configurado
                 slash.transform.localScale = Vector3.one * slashScale;
                 
                 Debug.Log($"✅ Slash criado no PLAYER - Pos: {slash.transform.position}, Scale: {slash.transform.localScale}");
                 
-                // Verifica se tem SpriteRenderer
                 SpriteRenderer sr = slash.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
@@ -282,18 +302,15 @@ public class SpannerScript : MonoBehaviour
                     Debug.Log($"✅ Sorting: Layer={sr.sortingLayerName}, Order={sr.sortingOrder}");
                 }
                 
-                // Auto-destrói o slash após slashDuration (não attackDuration)
                 Destroy(slash, slashDuration);
             }
             else
             {
-                // Debug para identificar o problema
                 if (!useAttackAnimation)
                     Debug.LogWarning("⚠️ useAttackAnimation está DESATIVADO!");
                 if (slashEffectPrefab == null)
                     Debug.LogWarning("⚠️ slashEffectPrefab está NULL! Arraste o prefab no Inspector.");
                     
-                // Se não tem prefab, usa animação do animator
                 if (useAttackAnimation && animator != null)
                 {
                     UpdateAnimations();
@@ -302,16 +319,15 @@ public class SpannerScript : MonoBehaviour
         }
     }
 
-    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Auto-gerenciamento: Detecta bullets do player
+        if (isDying) return; // Ignora colisões se já está morrendo
+        
+        // Detecta bullets do player
         if (collision.gameObject.GetComponent<BulletScript>() != null)
         {
             Destroy(collision.gameObject); // Destrói o bullet
-            Destroy(gameObject); // Destrói o spanner (1 hit kill)
-            Debug.Log("🔧 Spanner foi eliminado por bullet do player (Collision)!");
-            return;
+            Die(); // Chama método de morte
         }
     }
 }

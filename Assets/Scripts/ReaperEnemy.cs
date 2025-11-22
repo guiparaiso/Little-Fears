@@ -12,51 +12,72 @@ public class ReaperEnemy : MonoBehaviour
     [SerializeField] bool showHealthBar = true;
     private float currentHealth;
     
+    [Header("Sound")]
+    [SerializeField] AudioClip ambientSound; // Som que toca enquanto está vivo
+    [SerializeField] AudioClip deathSound; // Som ao morrer
+    [SerializeField] float ambientVolume = 0.5f; // Volume do som ambiente (0-1)
+    [SerializeField] bool fadeInAmbient = true; // Fade in ao spawnar
+    [SerializeField] float fadeInDuration = 1f; // Tempo do fade in
+    [SerializeField] bool fadeOutOnDeath = true; // Fade out ao morrer
+    [SerializeField] float fadeOutDuration = 0.5f; // Tempo do fade out
+    [SerializeField] float maxAudibleDistance = 20f; // Distância máxima para ouvir (3D sound)
+    private AudioSource ambientAudioSource;
+    
     [Header("Movement")]
     [SerializeField] float speed = 3.5f;
-    [SerializeField] float ragingSpeed = 5f; // Velocidade quando está machucado
+    [SerializeField] float ragingSpeed = 5f;
     [SerializeField] float chaseDistance = 15f;
     
     [Header("Teleport Attack")]
     [SerializeField] bool canTeleport = true;
-    [SerializeField] float teleportCooldown = 4f; // Reduzido de 5 para 4 (teleporta mais rápido)
-    [SerializeField] float teleportDistance = 2.5f; // Reduzido - teleporta MAIS PERTO
-    [SerializeField] float teleportMinDistance = 1f; // Reduzido - pode ficar mais perto
-    [SerializeField] float teleportWarningDuration = 0.7f; // Reduzido de 1 para 0.7s (menos tempo de aviso)
-    [SerializeField] GameObject teleportEffectPrefab; // Efeito de fumaça/sombra
+    [SerializeField] float teleportCooldown = 4f;
+    [SerializeField] float teleportDistance = 2.5f;
+    [SerializeField] float teleportMinDistance = 1f;
+    [SerializeField] float teleportWarningDuration = 0.7f;
+    [SerializeField] GameObject teleportEffectPrefab;
     [SerializeField] float teleportEffectDuration = 0.5f;
-    [SerializeField] Color teleportFlashColor = new Color(0.5f, 0f, 0.5f, 1f); // Roxo escuro
-    [SerializeField] Color teleportWarningColor = Color.red; // Vermelho de aviso
+    [SerializeField] Color teleportFlashColor = new Color(0.5f, 0f, 0.5f, 1f);
+    [SerializeField] Color teleportWarningColor = Color.red;
     
     [Header("Cursed Ground Attack")]
     [SerializeField] bool canCurseGround = true;
-    [SerializeField] float curseCooldown = 6f; // Reduzido de 8 para 6 (mais áreas amaldiçoadas)
-    [SerializeField] int maxCursedAreas = 3; // NOVO: Máximo de áreas simultâneas
-    [SerializeField] GameObject cursedGroundPrefab; // Prefab da área amaldiçoada
-    [SerializeField] float curseRadius = 2.5f; // Aumentado de 2 para 2.5 (área maior)
-    [SerializeField] float curseDuration = 5f; // Aumentado de 4 para 5 (dura mais tempo)
-    [SerializeField] float curseDamage = 15f; // Aumentado de 10 para 15 (mais dano)
-    [SerializeField] float curseDamageInterval = 0.5f; // Intervalo de dano (0.5s = 2x por segundo)
+    [SerializeField] float curseCooldown = 6f;
+    [SerializeField] int maxCursedAreas = 3;
+    [SerializeField] GameObject cursedGroundPrefab;
+    [SerializeField] float curseRadius = 2.5f;
+    [SerializeField] float curseDuration = 5f;
+    [SerializeField] float curseDamage = 15f;
+    [SerializeField] float curseDamageInterval = 0.5f;
     
     [Header("Combat")]
     [SerializeField] float attackRange = 1.5f;
     [SerializeField] float meleeDamage = 20f;
-    [SerializeField] float meleeAttackCooldown = 1.2f; // Cooldown entre ataques corpo-a-corpo
-    [SerializeField] float retreatDistance = 2f; // Distância para recuar após ataque
-    [SerializeField] float attackDuration = 0.3f; // Tempo pausado durante ataque
-    [SerializeField] float retreatSpeed = 5f; // Velocidade do recuo
-    [SerializeField] bool isInvulnerableDuringTeleport = true; // Não pode ser atingido durante teleporte
-    [SerializeField] bool useAttackAnimation = true; // Ativa animação de ataque
-    [SerializeField] GameObject slashEffectPrefab; // Prefab do efeito de slash
-    [SerializeField] Vector3 slashOffset = Vector3.zero; // Offset da posição do slash
-    [SerializeField] float slashScale = 2f; // Tamanho do slash (1 = tamanho original)
-    [SerializeField] float slashDuration = 0.5f; // Duração do efeito de slash em segundos
+    [SerializeField] float meleeAttackCooldown = 1.2f;
+    [SerializeField] float retreatDistance = 2f;
+    [SerializeField] float attackDuration = 0.3f;
+    [SerializeField] float retreatSpeed = 5f;
+    [SerializeField] bool isInvulnerableDuringTeleport = true;
+    [SerializeField] bool useAttackAnimation = true;
+    [SerializeField] GameObject slashEffectPrefab;
+    [SerializeField] Vector3 slashOffset = Vector3.zero;
+    [SerializeField] float slashScale = 2f;
+    [SerializeField] float slashDuration = 0.5f;
     
     [Header("Fear Settings")]
     [SerializeField] ScaryBarUI scaryBar;
     
     [Header("Animation")]
     [SerializeField] private Animator animator;
+
+    public float GetCurrentHealth()
+    {
+        return currentHealth;
+    }
+
+    public float GetMaxHealth()
+    {
+        return maxHealth;
+    }
     
     private NavMeshAgent agent;
     private SpriteRenderer spriteRenderer;
@@ -70,10 +91,10 @@ public class ReaperEnemy : MonoBehaviour
     private bool isTeleporting = false;
     private bool isCasting = false;
     private int currentCursedAreas = 0;
+    private bool isDying = false;
     
-    // Sistema de fases
-    private bool isEnraged = false; // Fica furioso quando HP < 50%
-    private bool isDesperado = false; // Fica desesperado quando HP < 25%
+    private bool isEnraged = false;
+    private bool isDesperado = false;
     
     private enum ReaperState { Idle, Chasing, Attacking, Retreating, Teleporting, Cursing }
     private ReaperState currentState = ReaperState.Chasing;
@@ -82,24 +103,21 @@ public class ReaperEnemy : MonoBehaviour
 
     private void Start()
     {
-        // Configura NavMeshAgent
         agent = GetComponent<NavMeshAgent>();
         agent.speed = speed;
         agent.updateRotation = false;
         agent.updateUpAxis = false;
-        agent.stoppingDistance = 0.1f; // Precisa chegar perto para colidir
+        agent.stoppingDistance = 0.1f;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
         agent.radius = 0.25f;
         agent.avoidancePriority = Random.Range(30, 50);
         
-        // Pega SpriteRenderer
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer != null)
         {
             originalColor = spriteRenderer.color;
         }
         
-        // Encontra player
         if (target == null)
         {
             GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -107,32 +125,101 @@ public class ReaperEnemy : MonoBehaviour
                 target = playerObj.transform;
         }
         
-        // Encontra ScaryBar
         if (scaryBar == null)
         {
             scaryBar = FindObjectOfType<ScaryBarUI>();
         }
         
-        // Inicializa HP
         currentHealth = maxHealth;
         
-        // Randomiza timers iniciais para não atacar todos ao mesmo tempo
         teleportTimer = Random.Range(teleportCooldown * 0.3f, teleportCooldown * 0.7f);
         curseTimer = Random.Range(curseCooldown * 0.3f, curseCooldown * 0.7f);
-        meleeAttackTimer = meleeAttackCooldown; // Pode atacar imediatamente
+        meleeAttackTimer = meleeAttackCooldown;
 
         if (GameManager.instance != null)
         {
             if (GameManager.instance.IsObjectRegistered(objectID))
             {
-                // Se já foi pega antes, destrói ela imediatamente ao carregar a cena
                 Destroy(gameObject);
+                return;
             }
         }
+        
+        // Configura som ambiente
+        SetupAmbientSound();
+    }
+
+    private void SetupAmbientSound()
+    {
+        if (ambientSound == null)
+        {
+            Debug.LogWarning("⚠️ Reaper: ambientSound não configurado!");
+            return;
+        }
+        
+        // Adiciona AudioSource ao GameObject
+        ambientAudioSource = gameObject.AddComponent<AudioSource>();
+        ambientAudioSource.clip = ambientSound;
+        ambientAudioSource.loop = true; // Loop infinito
+        ambientAudioSource.playOnAwake = false;
+        ambientAudioSource.spatialBlend = 1f; // 3D sound (0 = 2D, 1 = 3D)
+        ambientAudioSource.minDistance = 5f; // Distância mínima (volume máximo)
+        ambientAudioSource.maxDistance = maxAudibleDistance; // Distância máxima
+        ambientAudioSource.rolloffMode = AudioRolloffMode.Linear; // Decai linearmente
+        
+        // Inicia com volume 0 se vai fazer fade in
+        if (fadeInAmbient)
+        {
+            ambientAudioSource.volume = 0f;
+            StartCoroutine(FadeInAmbientSound());
+        }
+        else
+        {
+            ambientAudioSource.volume = ambientVolume;
+        }
+        
+        // Começa a tocar
+        ambientAudioSource.Play();
+        Debug.Log("🔊 Reaper: Som ambiente iniciado!");
+    }
+
+    IEnumerator FadeInAmbientSound()
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < fadeInDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeInDuration;
+            ambientAudioSource.volume = Mathf.Lerp(0f, ambientVolume, t);
+            yield return null;
+        }
+        
+        ambientAudioSource.volume = ambientVolume;
+    }
+
+    IEnumerator FadeOutAmbientSound()
+    {
+        if (ambientAudioSource == null) yield break;
+        
+        float startVolume = ambientAudioSource.volume;
+        float elapsed = 0f;
+        
+        while (elapsed < fadeOutDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / fadeOutDuration;
+            ambientAudioSource.volume = Mathf.Lerp(startVolume, 0f, t);
+            yield return null;
+        }
+        
+        ambientAudioSource.volume = 0f;
+        ambientAudioSource.Stop();
     }
 
     private void Update()
     {
+        if (isDying) return; // Para tudo se está morrendo
         if (target == null || agent == null) return;
         
         float distanceToTarget = Vector3.Distance(transform.position, target.position);
@@ -143,42 +230,49 @@ public class ReaperEnemy : MonoBehaviour
         {
             isDesperado = true;
             isEnraged = true;
-            agent.speed = ragingSpeed * 1.2f; // Ainda mais rápido!
+            agent.speed = ragingSpeed * 1.2f;
+            
+            // Aumenta volume do som quando desesperado
+            if (ambientAudioSource != null)
+            {
+                ambientAudioSource.volume = ambientVolume * 1.3f;
+            }
+            
             Debug.Log("💀💀💀 REAPER ESTÁ DESESPERADO! (HP < 25%)");
         }
         else if (healthPercent <= 0.5f && !isEnraged)
         {
             isEnraged = true;
             agent.speed = ragingSpeed;
+            
+            // Aumenta levemente o volume quando enraged
+            if (ambientAudioSource != null)
+            {
+                ambientAudioSource.volume = ambientVolume * 1.15f;
+            }
+            
             Debug.Log("💀💀 REAPER ESTÁ FURIOSO! (HP < 50%)");
         }
         
-        // Atualiza cooldowns (mais rápido quando enraged)
         float cooldownMultiplier = isEnraged ? 0.7f : 1f;
         teleportTimer += Time.deltaTime;
         curseTimer += Time.deltaTime;
         meleeAttackTimer += Time.deltaTime;
         
-        // Máquina de estados
         switch (currentState)
         {
             case ReaperState.Idle:
-                // REMOVIDO: Agora sempre persegue
                 currentState = ReaperState.Chasing;
                 break;
                 
             case ReaperState.Chasing:
-                // SEMPRE persegue o player
                 if (agent.isOnNavMesh)
                 {
                     agent.isStopped = false;
-                    agent.stoppingDistance = 0.1f; // stoppingDistance = 0 para colidir com o player
+                    agent.stoppingDistance = 0.1f;
                     agent.SetDestination(target.position);
                 }
                 
-                // IA melhorada: Escolhe ataques de forma mais inteligente
-                
-                // COMBO ESPECIAL: Teleporte + Área quando desesperado
                 if (isDesperado && canTeleport && canCurseGround && 
                     teleportTimer >= teleportCooldown * cooldownMultiplier && 
                     curseTimer >= curseCooldown * cooldownMultiplier && 
@@ -186,20 +280,16 @@ public class ReaperEnemy : MonoBehaviour
                 {
                     StartCoroutine(PerformTeleportCurseCombo());
                 }
-                // Prioridade 1: Área amaldiçoada (pode criar em qualquer distância)
                 else if (canCurseGround && curseTimer >= curseCooldown * cooldownMultiplier && 
                         currentCursedAreas < maxCursedAreas)
                 {
-                    // Chance maior de usar quando enraged
                     if (!isEnraged || Random.value < 0.7f)
                     {
                         StartCoroutine(PerformCurseGround());
                     }
                 }
-                // Prioridade 2: Teleporte para se aproximar e atacar
                 else if (canTeleport && teleportTimer >= teleportCooldown * cooldownMultiplier)
                 {
-                    // Teleporta para perto do player (objetivo: ataque corpo-a-corpo)
                     if (distanceToTarget > attackRange * 2f || 
                         (isEnraged && Random.value < 0.4f) || 
                         (isDesperado && Random.value < 0.6f))
@@ -207,12 +297,9 @@ public class ReaperEnemy : MonoBehaviour
                         StartCoroutine(PerformTeleport());
                     }
                 }
-                // Prioridade 3: Continua perseguindo até colidir com o player
-                // O ataque acontece via OnTriggerEnter2D quando colidir
                 break;
                 
             case ReaperState.Attacking:
-                // PARA completamente durante ataque
                 if (agent.isOnNavMesh)
                 {
                     agent.isStopped = true;
@@ -222,7 +309,6 @@ public class ReaperEnemy : MonoBehaviour
                 
                 if (attackTimer >= attackDuration)
                 {
-                    // Calcula para onde recuar (direção oposta ao player)
                     Vector3 directionAway = (transform.position - target.position).normalized;
                     retreatTarget = transform.position + directionAway * retreatDistance;
                     
@@ -235,27 +321,23 @@ public class ReaperEnemy : MonoBehaviour
                 break;
                 
             case ReaperState.Retreating:
-                // Recua RAPIDAMENTE para longe
                 if (agent.isOnNavMesh)
                 {
                     agent.isStopped = false;
-                    agent.speed = retreatSpeed; // Mais rápido que perseguição
+                    agent.speed = retreatSpeed;
                     agent.stoppingDistance = 0.2f;
                     agent.SetDestination(retreatTarget);
                 }
 
-                // Volta a perseguir quando chega perto do destino de recuo
                 if (!agent.pathPending && agent.remainingDistance <= 0.5f)
                 {
-                    agent.speed = isEnraged ? ragingSpeed : speed; // Restaura velocidade normal
+                    agent.speed = isEnraged ? ragingSpeed : speed;
                     currentState = ReaperState.Chasing;
                 }
-                break;
                 break;
                 
             case ReaperState.Teleporting:
             case ReaperState.Cursing:
-                // Estados controlados pelas corrotinas
                 if (agent.isOnNavMesh)
                 {
                     agent.isStopped = true;
@@ -263,7 +345,6 @@ public class ReaperEnemy : MonoBehaviour
                 break;
         }
         
-        // Atualiza animações
         UpdateAnimations();
     }
     
@@ -280,12 +361,10 @@ public class ReaperEnemy : MonoBehaviour
             agent.isStopped = true;
         }
         
-        // AVISO VISUAL: Pisca vermelho rapidamente
         if (spriteRenderer != null && animator != null)
         {
             float warningElapsed = 0f;
             
-            // Animação de warning
             if (animator != null)
             {
                 animator.SetBool("stopping", true);
@@ -299,18 +378,16 @@ public class ReaperEnemy : MonoBehaviour
             {
                 warningElapsed += Time.deltaTime;
                 
-                // Pisca rápido entre vermelho e branco
                 float pulse = Mathf.Sin(warningElapsed * 20f * Mathf.PI);
                 if (pulse > 0)
                 {
-                    spriteRenderer.color = teleportWarningColor; // Vermelho
+                    spriteRenderer.color = teleportWarningColor;
                 }
                 else
                 {
-                    spriteRenderer.color = Color.white; // Branco
+                    spriteRenderer.color = Color.white;
                 }
                 
-                // Treme no lugar
                 Vector3 shake = Random.insideUnitCircle * 0.05f;
                 transform.position += (Vector3)shake;
                 
@@ -318,15 +395,11 @@ public class ReaperEnemy : MonoBehaviour
             }
         }
         
-        Debug.Log("⚠️ Reaper vai teleportar!");
-        
-        // Efeito de desaparecimento
         if (teleportEffectPrefab != null)
         {
             Instantiate(teleportEffectPrefab, transform.position, Quaternion.identity);
         }
         
-        // Flash visual roxo
         if (spriteRenderer != null)
         {
             spriteRenderer.color = teleportFlashColor;
@@ -334,17 +407,14 @@ public class ReaperEnemy : MonoBehaviour
         
         yield return new WaitForSeconds(0.3f);
         
-        // Calcula posição de teleporte - direção ALEATÓRIA ao redor do player
         float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
         Vector2 randomDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
         float randomDistance = Random.Range(teleportMinDistance, teleportDistance);
         Vector3 teleportPos = target.position + (Vector3)randomDirection * randomDistance;
         
-        // Verifica se a posição é válida no NavMesh
         UnityEngine.AI.NavMeshHit hit;
         if (UnityEngine.AI.NavMesh.SamplePosition(teleportPos, out hit, 3f, UnityEngine.AI.NavMesh.AllAreas))
         {
-            // Teleporta
             if (agent.isOnNavMesh)
             {
                 agent.Warp(hit.position);
@@ -354,20 +424,12 @@ public class ReaperEnemy : MonoBehaviour
                 transform.position = hit.position;
             }
             
-            // Efeito de aparecimento
             if (teleportEffectPrefab != null)
             {
                 Instantiate(teleportEffectPrefab, transform.position, Quaternion.identity);
             }
-            
-            Debug.Log($"💀 Reaper teleportou para perto do player! Distância: {Vector3.Distance(hit.position, target.position):F1}");
-        }
-        else
-        {
-            Debug.LogWarning("⚠️ Não encontrou posição válida no NavMesh para teleporte!");
         }
         
-        // Restaura cor
         if (spriteRenderer != null)
         {
             spriteRenderer.color = originalColor;
@@ -375,7 +437,6 @@ public class ReaperEnemy : MonoBehaviour
         
         yield return new WaitForSeconds(teleportEffectDuration);
         
-        // Garante que volta a se mover
         isTeleporting = false;
         currentState = ReaperState.Chasing;
         
@@ -399,7 +460,6 @@ public class ReaperEnemy : MonoBehaviour
             agent.isStopped = true;
         }
         
-        // Animação de parado + casting
         if (animator != null)
         {
             animator.SetBool("stopping", true);
@@ -407,12 +467,10 @@ public class ReaperEnemy : MonoBehaviour
             animator.SetBool("walking_right", false);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
-            // animator.SetTrigger("CastCurse"); // Se tiver animação específica
         }
         
-        yield return new WaitForSeconds(0.5f); // Tempo de cast
+        yield return new WaitForSeconds(0.5f);
         
-        // Cria área amaldiçoada na posição do player
         Vector3 cursePosition = target.position;
         
         GameObject cursedArea;
@@ -422,20 +480,14 @@ public class ReaperEnemy : MonoBehaviour
         }
         else
         {
-            // Cria área simples se não tem prefab
             cursedArea = new GameObject("CursedGround");
             cursedArea.transform.position = cursePosition;
             
-            // Adiciona visual básico
             SpriteRenderer sr = cursedArea.AddComponent<SpriteRenderer>();
-            sr.color = new Color(0.3f, 0f, 0.3f, 0.5f); // Roxo transparente
-            sr.sortingOrder = -1; // Atrás de tudo
-            
-            // Cria sprite circular básico (deixa sem sprite, só a cor)
-            // O visual será apenas um quadrado colorido - melhor criar um prefab depois
+            sr.color = new Color(0.3f, 0f, 0.3f, 0.5f);
+            sr.sortingOrder = -1;
         }
         
-        // Adiciona componente de dano
         CursedGroundArea curseScript = cursedArea.GetComponent<CursedGroundArea>();
         if (curseScript == null)
         {
@@ -447,15 +499,12 @@ public class ReaperEnemy : MonoBehaviour
         curseScript.damagePerTick = curseDamage * curseDamageInterval;
         curseScript.damageInterval = curseDamageInterval;
         curseScript.scaryBar = scaryBar;
-        curseScript.reaper = this; // Passa referência para decrementar contador
+        curseScript.reaper = this;
         
-        currentCursedAreas++; // Incrementa contador
-        
-        Debug.Log($"💀 Reaper criou chão amaldiçoado! Áreas ativas: {currentCursedAreas}/{maxCursedAreas}");
+        currentCursedAreas++;
         
         yield return new WaitForSeconds(0.5f);
         
-        // Garante que volta a se mover
         isCasting = false;
         currentState = ReaperState.Chasing;
         
@@ -466,22 +515,13 @@ public class ReaperEnemy : MonoBehaviour
         }
     }
     
-    // NOVO: Combo de teleporte + área amaldiçoada
     IEnumerator PerformTeleportCurseCombo()
     {
-        Debug.Log("💀💀💀 REAPER USA COMBO ESPECIAL: TELEPORTE + ÁREA!");
-        
-        // Teleporta primeiro
         yield return StartCoroutine(PerformTeleport());
-        
-        // Espera um pouco
         yield return new WaitForSeconds(0.3f);
-        
-        // Cria área amaldiçoada imediatamente após teleporte
         yield return StartCoroutine(PerformCurseGround());
     }
     
-    // NOVO: Flash visual ao atacar
     IEnumerator AttackFlash()
     {
         if (spriteRenderer == null) yield break;
@@ -494,10 +534,8 @@ public class ReaperEnemy : MonoBehaviour
         spriteRenderer.color = originalCol;
     }
     
-    // NOVO: Sistema de dano (para balas do player)
     public void TakeDamage(float damage)
     {
-        // Não recebe dano se está teleportando
         if (isInvulnerableDuringTeleport && isTeleporting)
         {
             Debug.Log("💀 Reaper é invulnerável durante teleporte!");
@@ -509,13 +547,11 @@ public class ReaperEnemy : MonoBehaviour
         
         Debug.Log($"💀 Reaper recebeu {damage} de dano! HP: {currentHealth}/{maxHealth}");
         
-        // Efeito visual
         if (spriteRenderer != null)
         {
             StartCoroutine(DamageFlash());
         }
         
-        // Morre se HP chegou a 0
         if (currentHealth <= 0)
         {
             Die();
@@ -539,17 +575,37 @@ public class ReaperEnemy : MonoBehaviour
     
     private void Die()
     {
+        if (isDying) return;
+        isDying = true;
+        
         Debug.Log("💀☠️ REAPER FOI DERROTADO!");
 
-        GameManager.instance.RegisterObject(objectID);
+        if (GameManager.instance != null)
+        {
+            GameManager.instance.RegisterObject(objectID);
+        }
 
-        // Efeito de morte (pode adicionar partículas, som, etc)
+        // Para o som ambiente com fade out
+        if (fadeOutOnDeath && ambientAudioSource != null)
+        {
+            StartCoroutine(FadeOutAmbientSound());
+        }
+        else if (ambientAudioSource != null)
+        {
+            ambientAudioSource.Stop();
+        }
+        
+        // Toca som de morte
+        if (deathSound != null)
+        {
+            AudioSource.PlayClipAtPoint(deathSound, transform.position);
+        }
+        
         if (teleportEffectPrefab != null)
         {
             Instantiate(teleportEffectPrefab, transform.position, Quaternion.identity);
         }
         
-        // Destrói todas as áreas amaldiçoadas
         CursedGroundArea[] areas = FindObjectsOfType<CursedGroundArea>();
         foreach (CursedGroundArea area in areas)
         {
@@ -559,7 +615,32 @@ public class ReaperEnemy : MonoBehaviour
             }
         }
         
-        Destroy(gameObject);
+        // Esconde visualmente
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.enabled = false;
+        }
+        
+        // Desativa componentes
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
+        
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.enabled = false;
+        }
+        
+        // Destrói após delay (tempo do som ou fade out)
+        float destroyDelay = fadeOutOnDeath ? fadeOutDuration : 0.5f;
+        if (deathSound != null && deathSound.length > destroyDelay)
+        {
+            destroyDelay = deathSound.length;
+        }
+        
+        Destroy(gameObject, destroyDelay);
     }
     
     private void UpdateAnimations()
@@ -570,7 +651,6 @@ public class ReaperEnemy : MonoBehaviour
         float moveHorizontal = velocity.x;
         float moveVertical = velocity.y;
         
-        // Se está teleportando ou cursando, para completamente
         if (isTeleporting || isCasting)
         {
             animator.SetBool("walking_left", false);
@@ -581,14 +661,11 @@ public class ReaperEnemy : MonoBehaviour
             return;
         }
         
-        // Durante ataque ou recuo, MANTÉM a direção atual da animação
         if (currentState == ReaperState.Attacking || currentState == ReaperState.Retreating)
         {
-            // Não muda as animações, mantém a última direção
             return;
         }
         
-        // Se está completamente parado (não atacando nem recuando)
         if (velocity.magnitude < 0.1f)
         {
             animator.SetBool("walking_left", false);
@@ -601,7 +678,6 @@ public class ReaperEnemy : MonoBehaviour
         
         animator.SetBool("stopped", false);
         
-        // Previne diagonal
         if (Mathf.Abs(moveHorizontal) > 0.1f && Mathf.Abs(moveVertical) > 0.1f)
         {
             if (Mathf.Abs(moveHorizontal) >= Mathf.Abs(moveVertical))
@@ -610,7 +686,6 @@ public class ReaperEnemy : MonoBehaviour
                 moveHorizontal = 0;
         }
         
-        // Animações direcionais
         if (moveHorizontal < -0.1f)
         {
             animator.SetBool("walking_left", true);
@@ -643,117 +718,58 @@ public class ReaperEnemy : MonoBehaviour
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Quando colidir com o player, entra no estado de ataque
+        if (isDying) return;
+        
         if (other.CompareTag("Player") && meleeAttackTimer >= meleeAttackCooldown && currentState == ReaperState.Chasing)
         {
             currentState = ReaperState.Attacking;
             attackTimer = 0f;
             meleeAttackTimer = 0f;
             
-            // Causa dano e efeitos
             if (scaryBar != null)
             {
                 scaryBar.AddFear(meleeDamage);
                 Debug.Log("💀 Reaper atacou corpo-a-corpo!");
                 
-                // Efeito visual do ataque
                 if (spriteRenderer != null)
                 {
                     StartCoroutine(AttackFlash());
                 }
                 
-                // Instancia efeito de slash no player
                 if (useAttackAnimation && slashEffectPrefab != null)
                 {
                     Vector3 slashPosition = other.transform.position + slashOffset;
                     GameObject slash = Instantiate(slashEffectPrefab, slashPosition, Quaternion.identity);
                     slash.transform.position = new Vector3(slashPosition.x, slashPosition.y, other.transform.position.z - 0.1f);
                     slash.transform.localScale = Vector3.one * slashScale;
-                    Debug.Log($"⚔️ Reaper slash criado no PLAYER - Scale: {slashScale}");
                     Destroy(slash, slashDuration);
                 }
             }
         }
         
-        // Detecta bullets do player pelo script BulletScript
         if (other.GetComponent<BulletScript>() != null)
         {
-            float damage = 10f; // Dano do bullet
+            float damage = 10f;
             TakeDamage(damage);
-            Destroy(other.gameObject); // Destrói o bullet
-            Debug.Log("💀 Reaper foi atingido por bullet do player!");
+            Destroy(other.gameObject);
         }
     }
     
-    // Auto-gerenciamento: Detecta bullets do player (versão Collision)
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Detecta bullets do player pelo script BulletScript
+        if (isDying) return;
+        
         if (collision.gameObject.GetComponent<BulletScript>() != null)
         {
-            float damage = 10f; // Dano do bullet
+            float damage = 10f;
             TakeDamage(damage);
-            Destroy(collision.gameObject); // Destrói o bullet
-            Debug.Log("💀 Reaper foi atingido por bullet do player (Collision)!");
+            Destroy(collision.gameObject);
         }
     }
     
-    // OnGUI para mostrar barra de HP (simples)
-    private void OnGUI()
-    {
-        if (!showHealthBar || target == null) return;
-        
-        // Só mostra se está perto do player
-        float distanceToTarget = Vector3.Distance(transform.position, target.position);
-        if (distanceToTarget > 10f) return;
-        
-        // Converte posição world para screen
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + Vector3.up * 0.8f);
-        
-        if (screenPos.z > 0) // Está na frente da câmera
-        {
-            // Inverte Y porque GUI usa coordenadas diferentes
-            screenPos.y = Screen.height - screenPos.y;
-            
-            // Desenha barra de fundo (preto)
-            GUI.backgroundColor = Color.black;
-            GUI.Box(new Rect(screenPos.x - 30, screenPos.y - 5, 60, 8), "");
-            
-            // Desenha barra de HP (vermelho -> amarelo -> verde baseado em HP)
-            float healthPercent = currentHealth / maxHealth;
-            Color barColor;
-            if (healthPercent > 0.5f)
-                barColor = Color.Lerp(Color.yellow, Color.green, (healthPercent - 0.5f) * 2f);
-            else
-                barColor = Color.Lerp(Color.red, Color.yellow, healthPercent * 2f);
-            
-            GUI.backgroundColor = barColor;
-            GUI.Box(new Rect(screenPos.x - 28, screenPos.y - 3, 56 * healthPercent, 4), "");
-        }
-    }
-    
-    // Método público para decrementar contador de áreas
     public void OnCursedAreaDestroyed()
     {
         currentCursedAreas--;
         if (currentCursedAreas < 0) currentCursedAreas = 0;
-    }
-    
-    private void OnDrawGizmosSelected()
-    {
-        // Desenha alcance de perseguição
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, chaseDistance);
-        
-        // Desenha alcance de ataque
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-        
-        // Desenha alcance de teleporte
-        if (target != null)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawWireSphere(target.position, teleportDistance);
-        }
     }
 }

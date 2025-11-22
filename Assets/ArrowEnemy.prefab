@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1aedff25192aa743870b250f2a8b3cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  deathSound: {fileID: 8300000, guid: dacb557e7a8a51b45ab3e1b38d8f9afd, type: 3}
   target: {fileID: 0}
   chaseSpeed: 3
   retreatSpeed: 5
@@ -225,3 +226,4 @@ MonoBehaviour:
   fearOnHit: 15
   scaryBar: {fileID: 0}
   animator: {fileID: 0}
+  objectID: 
