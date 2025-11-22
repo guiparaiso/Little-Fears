@@ -179,6 +179,15 @@ public class Enemy : MonoBehaviour
     // Este método é chamado automaticamente quando o inimigo colide com o jogador
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Auto-gerenciamento: Detecta bullets do player
+        if (other.GetComponent<BulletScript>() != null)
+        {
+            Destroy(other.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o inimigo (1 hit kill)
+            Debug.Log("👻 Inimigo foi eliminado por bullet do player!");
+            return;
+        }
+        
         if (other.CompareTag("Player"))
         {
             // Causa medo

@@ -662,13 +662,13 @@ public class ReaperEnemy : MonoBehaviour
             }
         }
         
-        // Detecta balas do player
-        BulletScript bullet = other.GetComponent<BulletScript>();
-        if (bullet != null)
+        // Detecta bullets do player pelo script BulletScript
+        if (other.GetComponent<BulletScript>() != null)
         {
-            float damage = 10f; // Dano padrão da bala
+            float damage = 10f; // Dano do bullet
             TakeDamage(damage);
-            Destroy(other.gameObject); // Destrói a bala
+            Destroy(other.gameObject); // Destrói o bullet
+            Debug.Log("💀 Reaper foi atingido por bullet do player!");
         }
     }
     

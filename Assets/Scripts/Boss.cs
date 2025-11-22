@@ -176,4 +176,16 @@ public class Boss : MonoBehaviour
         // Destrói o Boss
         Destroy(gameObject);
     }
+
+    // Auto-gerenciamento: Detecta bullets do player
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (other.GetComponent<BulletScript>() != null)
+        {
+            TakeDamage(1); // Causa 1 de dano ao Boss
+            Destroy(other.gameObject); // Destrói o bullet
+            Debug.Log("Boss foi atingido por bullet do player!");
+        }
+    }
 }

@@ -278,4 +278,16 @@ public class ArcherEnemyScript : MonoBehaviour
             animator.SetBool("walking_right", false);
         }
     }
+
+    // Auto-gerenciamento: Detecta bullets do player
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // Detecta bullets do player pelo script BulletScript
+        if (other.GetComponent<BulletScript>() != null)
+        {
+            Destroy(other.gameObject); // Destrói o bullet
+            Destroy(gameObject); // Destrói o archer (1 hit kill)
+            Debug.Log("🏹 Archer foi eliminado por bullet do player!");
+        }
+    }
 }
