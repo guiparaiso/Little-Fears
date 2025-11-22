@@ -238,6 +238,10 @@ MonoBehaviour:
   panicColor: {r: 1, g: 0, b: 0, a: 1}
   tenseThreshold: 0.3
   panicThreshold: 0.7
+  playerSpriteRenderer: {fileID: 0}
+  damageFlashColor: {r: 1, g: 0, b: 0, a: 1}
+  flashDuration: 0.2
+  flashCount: 2
   audioSource: {fileID: 0}
   onFilledClip: {fileID: 0}
   onScaryBarFilled:
