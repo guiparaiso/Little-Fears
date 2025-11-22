@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1249173254308913135}
   - component: {fileID: 3890305069310530769}
   - component: {fileID: 8245949583868606960}
-  - component: {fileID: 114038575814514560}
+  - component: {fileID: 43311537700085618}
   - component: {fileID: 2731891863321879662}
   - component: {fileID: 5044869593727616253}
   - component: {fileID: 6723480759563352820}
@@ -114,8 +114,8 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!58 &114038575814514560
-CircleCollider2D:
+--- !u!61 &43311537700085618
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -144,12 +144,22 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.005140267, y: 0}
-  m_Radius: 0.18128806
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.47, y: 0.95}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.47, y: 0.95}
+  m_EdgeRadius: 0
 --- !u!50 &2731891863321879662
 Rigidbody2D:
   serializedVersion: 5
@@ -215,20 +225,22 @@ MonoBehaviour:
   speed: 2
   keepDistance: 4
   tooCloseDistance: 2
-  poisonPrefab: {fileID: 8101372329207508234, guid: 4d50e7cfd4ca9bf4fb83d554b6dbef04, type: 3}
+  poisonPrefab: {fileID: 5654774568348049373, guid: 3f891cf92e2b88748a5f7e4c76a2ee77, type: 3}
   spitPoint: {fileID: 0}
   spitRange: 6
   spitCooldown: 2
   spitSpeed: 8
   poisonDamage: 25
+  explosionSound: {fileID: 8300000, guid: 530a0772a67a1b342a32ffb448e8f303, type: 3}
   maxHealth: 50
   explosionHealthThreshold: 15
   explosionRadius: 3
   explosionDamage: 30
-  explosionEffectPrefab: {fileID: 0}
+  explosionEffectPrefab: {fileID: 6352069309102397183, guid: f46f26da8f812bf40aac3a0328995295, type: 3}
   explosionWarningColor: {r: 1, g: 0, b: 0, a: 1}
   warningDuration: 1
+  autoExplodeOnStart: 1
   autoExplodeAfterTime: 1
-  timeUntilAutoExplode: 15
+  timeUntilAutoExplode: 5
   scaryBar: {fileID: 0}
   animator: {fileID: 5044869593727616253}

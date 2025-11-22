@@ -20,13 +20,15 @@ public class PumpkinEnemy : MonoBehaviour
     [SerializeField] float poisonDamage = 15f; // Dano de medo do veneno
     
     [Header("Health & Explosion")]
+    [SerializeField] AudioClip explosionSound; // Som da explosão
     [SerializeField] float maxHealth = 50f;
     [SerializeField] float explosionHealthThreshold = 15f; // Explode quando HP < 15
     [SerializeField] float explosionRadius = 3f;
     [SerializeField] float explosionDamage = 30f;
     [SerializeField] GameObject explosionEffectPrefab; // Efeito visual da explosão
     [SerializeField] Color explosionWarningColor = Color.red;
-    [SerializeField] float warningDuration = 2f; // Tempo piscando antes de explodir (aumentado para 2s)
+    [SerializeField] float warningDuration = 5f; // Tempo piscando antes de explodir
+    [SerializeField] bool autoExplodeOnStart = false; // Se true, explode 5s após começar o jogo
     [SerializeField] bool autoExplodeAfterTime = false; // DESATIVADO - só explode com dano
     [SerializeField] float timeUntilAutoExplode = 15f; // Tempo até explodir sozinha
     
@@ -45,6 +47,7 @@ public class PumpkinEnemy : MonoBehaviour
     private Color originalColor;
     private float lifeTimer = 0f; // Tempo de vida total
     private Vector3 originalScale; // Guarda escala original
+    private bool hasSpawnedEffect = false; // Controla se já instanciou o efeito de explosão
     
     private enum PumpkinState { Chasing, KeepingDistance, Attacking, Exploding }
     private PumpkinState currentState = PumpkinState.Chasing;
@@ -92,6 +95,13 @@ public class PumpkinEnemy : MonoBehaviour
         if (spitPoint == null)
         {
             spitPoint = transform;
+        }
+        
+        // Se autoExplodeOnStart estiver ativo, inicia explosão imediatamente
+        if (autoExplodeOnStart)
+        {
+            StartExplosion();
+            Debug.Log("🎃 Abóbora vai explodir em 5 segundos!");
         }
     }
 
@@ -182,18 +192,46 @@ public class PumpkinEnemy : MonoBehaviour
             return;
         }
         
-        // Cria projétil de veneno
-        GameObject poison = Instantiate(poisonPrefab, spitPoint.position, Quaternion.identity);
-        
         // Calcula direção para o player
         Vector3 direction = (target.position - spitPoint.position).normalized;
+        
+        // Calcula rotação baseada na direção
+        float angle = 0f;
+        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+        {
+            // Movimento horizontal predominante
+            if (direction.x < 0) // Esquerda
+                angle = -90f;
+            else // Direita
+                angle = 90f;
+        }
+        else
+        {
+            // Movimento vertical predominante
+            if (direction.y > 0) // Cima
+                angle = 180f;
+            else // Baixo
+                angle = 0f;
+        }
+        
+        // Cria projétil de veneno com rotação correta
+        Quaternion rotation = Quaternion.Euler(0f, 0f, angle);
+        GameObject poison = Instantiate(poisonPrefab, spitPoint.position, rotation);
         
         // Adiciona Rigidbody2D se não tiver
         Rigidbody2D rb = poison.GetComponent<Rigidbody2D>();
         if (rb == null)
         {
             rb = poison.AddComponent<Rigidbody2D>();
-            rb.gravityScale = 0f;
+        }
+        rb.gravityScale = 0f;
+        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous; // Melhor detecção de colisão
+        
+        // Adiciona Collider2D se não tiver
+        if (poison.GetComponent<Collider2D>() == null)
+        {
+            CircleCollider2D collider = poison.AddComponent<CircleCollider2D>();
+            collider.isTrigger = true; // Usa trigger para detectar colisões
         }
         
         // Aplica velocidade
@@ -227,7 +265,7 @@ public class PumpkinEnemy : MonoBehaviour
             animator.SetBool("walking_right", false);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
-            animator.SetBool("stopping", true);
+            animator.SetBool("stopped", true);
         }
         
         Debug.Log("⚠️ ABÓBORA VAI EXPLODIR! Fique longe! ⚠️");
@@ -276,10 +314,16 @@ public class PumpkinEnemy : MonoBehaviour
     
     void Explode()
     {
-        // Cria efeito visual
+        // Cria efeito visual da explosão
         if (explosionEffectPrefab != null)
         {
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            GameObject effect = Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(effect, 2.6f);
+        }
+        // Toca som da explosão se estiver atribuído
+        if (explosionSound != null)
+        {
+            AudioSource.PlayClipAtPoint(explosionSound, transform.position);
         }
         
         // Causa dano em área

@@ -10,6 +10,30 @@ public class PoisonProjectile : MonoBehaviour
     
     private void Start()
     {
+        // Garante que tem Rigidbody2D configurado corretamente
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (rb != null)
+        {
+            rb.gravityScale = 0f;
+            rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        }
+        
+        // Garante que tem Collider2D como trigger
+        Collider2D col = GetComponent<Collider2D>();
+        if (col != null)
+        {
+            col.isTrigger = true;
+        }
+        
+        // Garante que o Animator está ativo (se existir)
+        Animator animator = GetComponent<Animator>();
+        if (animator != null)
+        {
+            animator.enabled = true;
+            // Se tiver um trigger/bool específico, ative aqui:
+            // animator.SetTrigger("Play");
+        }
+        
         // Destrói após lifetime
         Destroy(gameObject, lifetime);
         
@@ -35,6 +59,7 @@ public class PoisonProjectile : MonoBehaviour
             if (scaryBar != null)
             {
                 scaryBar.AddFear(damage);
+                scaryBar.PoisonFlash(); // Flash verde no player
                 Debug.Log($"Veneno acertou o player! Dano: {damage}");
             }
             
@@ -69,6 +94,7 @@ public class PoisonProjectile : MonoBehaviour
             if (scaryBar != null)
             {
                 scaryBar.AddFear(damage);
+                scaryBar.PoisonFlash(); // Flash verde no player
                 Debug.Log($"Veneno acertou o player! Dano: {damage}");
             }
             

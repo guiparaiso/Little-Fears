@@ -189,4 +189,39 @@ public class ScaryBarUI : MonoBehaviour
         playerSpriteRenderer.color = originalColor;
         isFlashing = false; // Libera para piscar novamente
     }
+    
+    /// <summary>
+    /// Faz o player piscar verde quando leva dano de veneno
+    /// </summary>
+    public void PoisonFlash()
+    {
+        if (playerSpriteRenderer != null && !isFlashing)
+        {
+            StartCoroutine(PoisonFlashCoroutine());
+        }
+    }
+    
+    private IEnumerator PoisonFlashCoroutine()
+    {
+        if (playerSpriteRenderer == null) yield break;
+        
+        isFlashing = true;
+        Color originalColor = playerSpriteRenderer.color;
+        Color poisonColor = Color.green;
+        
+        for (int i = 0; i < flashCount; i++)
+        {
+            // Flash verde
+            playerSpriteRenderer.color = poisonColor;
+            yield return new WaitForSeconds(flashDuration / 2f);
+            
+            // Volta à cor original
+            playerSpriteRenderer.color = originalColor;
+            yield return new WaitForSeconds(flashDuration / 2f);
+        }
+        
+        // Garante que voltou à cor original
+        playerSpriteRenderer.color = originalColor;
+        isFlashing = false;
+    }
 }
