@@ -227,15 +227,15 @@ MonoBehaviour:
   minAlpha: 0.3
   maxAlpha: 1
   showSpawnIndicator: 1
-  spawnIndicatorPrefab: {fileID: -2253911629886400664, guid: 9190b0412700dad4ba45198941138b60, type: 3}
-  indicatorDuration: 1
-  indicatorColor: {r: 1, g: 0.5, b: 0, a: 0.5}
-  indicatorSize: 1
+  spawnIndicatorPrefab: {fileID: 602174105035904811, guid: 2578b4e4a338f1e4684281476cd05ab0, type: 3}
+  indicatorDuration: 2
+  indicatorColor: {r: 0.40843508, g: 0, b: 0.5660378, a: 1}
+  indicatorSize: 2
   showWarningEffect: 1
   warningDuration: 1
-  warningColor: {r: 1, g: 0, b: 0, a: 0.8}
+  warningColor: {r: 0.36517262, g: 0.0024563547, b: 0.4339623, a: 1}
   warningPulseSpeed: 8
-  warningGlowIntensity: 2
+  warningGlowIntensity: 1
   flashOnSpawn: 1
   flashDuration: 0.3
   flashColor: {r: 1, g: 1, b: 1, a: 1}

@@ -3,6 +3,11 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Slash Effect")]
+    [SerializeField] GameObject slashEffectPrefab; // Prefab do efeito de slash
+    [SerializeField] Vector3 slashOffset = Vector3.zero; // Offset da posição do slash
+    [SerializeField] float slashScale = 2f; // Tamanho do slash (1 = tamanho original)
+    [SerializeField] float slashDuration = 0.5f; // Duração do efeito de slash em segundos
     [SerializeField] Transform target;
     [SerializeField] float speed = 3.5f;
     [SerializeField] float stoppingDistance = 0.8f;
@@ -181,10 +186,27 @@ public class Enemy : MonoBehaviour
             {
                 scaryBar.AddFear(fearOnCollision);
             }
-            
+
             // Inicia ataque e recuo
             currentState = EnemyState.Attacking;
             attackTimer = 0f;
+
+            // Instancia efeito de slash
+            if (useAttackAnimation && slashEffectPrefab != null)
+            {
+                // Cria o slash na posição do PLAYER (other), não do inimigo
+                Vector3 slashPosition = other.transform.position + slashOffset;
+                GameObject slash = Instantiate(slashEffectPrefab, slashPosition, Quaternion.identity);
+
+                // Garante que está no layer correto e na posição Z correta
+                slash.transform.position = new Vector3(slashPosition.x, slashPosition.y, other.transform.position.z - 0.1f);
+
+                // Aplica o tamanho configurado
+                slash.transform.localScale = Vector3.one * slashScale;
+
+                // Auto-destrói o slash após slashDuration
+                Destroy(slash, slashDuration);
+            }
         }
     }
 }

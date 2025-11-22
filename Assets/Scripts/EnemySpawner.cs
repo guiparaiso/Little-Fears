@@ -15,44 +15,44 @@ public class EnemySpawner : MonoBehaviour
     
     [Header("Target")]
     [SerializeField] Transform player;
-
+    
     [Header("Animation")]
     [SerializeField] private Animator animator;
-    [SerializeField] string idleAnimationState = "walking_down"; // Animação padrão quando parado
-
+    [SerializeField] string idleAnimationState = "walking_down";
+    
     [Header("Visual Effects")]
-    [SerializeField] bool useVisualEffects = false;   // Ative apenas se quiser efeito no sprite
+    [SerializeField] bool useVisualEffects = false;
     [SerializeField] SpriteRenderer spriteRenderer;
     [SerializeField] float pulseSpeed = 2f;
     [SerializeField] Color glowColor = Color.gray;
     [SerializeField] float minAlpha = 0.3f;
     [SerializeField] float maxAlpha = 1f;
-
+    
     [Header("Spawn Indicator")]
     [SerializeField] bool showSpawnIndicator = true;
     [SerializeField] GameObject spawnIndicatorPrefab;
     [SerializeField] float indicatorDuration = 1f;
-    [SerializeField] Color indicatorColor = new Color(1f, 0.5f, 0f, 0.5f); // Laranja translúcido
+    [SerializeField] Color indicatorColor = new Color(1f, 0.5f, 0f, 0.5f);
     [SerializeField] float indicatorSize = 1f;
-
+    
     [Header("Spawn Warning Effect")]
     [SerializeField] bool showWarningEffect = true;
-    [SerializeField] float warningDuration = 1f; // Tempo do aviso antes de spawnar
-    [SerializeField] Color warningColor = new Color(1f, 0f, 0f, 0.8f); // Vermelho brilhante
-    [SerializeField] float warningPulseSpeed = 8f; // Velocidade da pulsação
-    [SerializeField] float warningGlowIntensity = 2f; // Intensidade do brilho
+    [SerializeField] float warningDuration = 1f;
+    [SerializeField] Color warningColor = new Color(1f, 0f, 0f, 0.8f);
+    [SerializeField] float warningPulseSpeed = 8f;
+    [SerializeField] float warningGlowIntensity = 2f;
     
     [Header("Spawn Flash Effect")]
     [SerializeField] bool flashOnSpawn = true;
     [SerializeField] float flashDuration = 0.3f;
     [SerializeField] Color flashColor = Color.white;
-
+    
     [Header("Movement Settings - Flee from Player")]
     [SerializeField] bool canMove = false;
     [SerializeField] float moveSpeed = 2f;
-    [SerializeField] float fleeDistance = 5f; // Distância mínima para manter do player
-    [SerializeField] float detectionRange = 10f; // Distância para começar a fugir
-
+    [SerializeField] float fleeDistance = 5f;
+    [SerializeField] float detectionRange = 10f;
+    
     private float spawnTimer = 0f;
     private int currentEnemyCount = 0;
     private float pulseTimer = 0f;
@@ -63,45 +63,33 @@ public class EnemySpawner : MonoBehaviour
     private Color originalColor;
     private Collider2D col;
     private NavMeshAgent agent;
+    private bool isDestroyed = false; // FLAG para controlar destruição
+    private System.Collections.Generic.List<GameObject> activeIndicators = new System.Collections.Generic.List<GameObject>(); // Lista de portais ativos
 
     private void Start()
     {
-        // Importante: Remove a tag Enemy do spawner para não ser atacado
-
+        col = GetComponent<Collider2D>();
+        
         if (col != null)
         {
-            // Evita que o spawner bloqueie fisicamente inimigos
             if (!col.isTrigger)
             {
                 col.isTrigger = true;
                 Debug.Log("Spawner Collider definido como isTrigger para não bloquear inimigos.");
             }
-        }
-
-        // Configura o Animator
-        if (animator == null)
-        {
-            animator = GetComponent<Animator>();
-        }
-
-        // Garante que o Collider2D está configurado corretamente
-        col = GetComponent<Collider2D>();
-        if (col != null)
-        {
-            // Se for BoxCollider2D, garante que está centralizado e com tamanho adequado
+            
             BoxCollider2D boxCol = col as BoxCollider2D;
             if (boxCol != null)
             {
-                // Centraliza o offset
                 boxCol.offset = Vector2.zero;
                 Debug.Log($"Spawner Collider configurado - Offset: {boxCol.offset}, Size: {boxCol.size}");
             }
         }
-        else
-        {
-            Debug.LogWarning("Spawner não tem Collider2D! Adicione um BoxCollider2D ou CircleCollider2D.");
-        }
 
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
 
         if (player == null)
         {
@@ -122,7 +110,6 @@ public class EnemySpawner : MonoBehaviour
             originalColor = spriteRenderer.color;
         }
 
-        // Configura NavMeshAgent se canMove está ativado
         if (canMove)
         {
             agent = GetComponent<NavMeshAgent>();
@@ -134,7 +121,6 @@ public class EnemySpawner : MonoBehaviour
             agent.updateRotation = false;
             agent.updateUpAxis = false;
             
-            // Inicia parado com animação stopping
             if (animator != null)
             {
                 animator.SetBool("stopped", true);
@@ -148,9 +134,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        if (isDestroyed) return; // Não processa se foi destruído
+
         spawnTimer += Time.deltaTime;
 
-        // Inicia aviso antes de spawnar
         if (showWarningEffect && !isWarning && spawnTimer >= (spawnInterval - warningDuration) && currentEnemyCount < maxEnemies)
         {
             isWarning = true;
@@ -159,7 +146,10 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnTimer >= spawnInterval && currentEnemyCount < maxEnemies)
         {
-            SpawnEnemy();
+            if (player != null && player.gameObject != null && player.gameObject.activeInHierarchy)
+            {
+                SpawnEnemy();
+            }
             spawnTimer = 0f;
             isWarning = false;
         }
@@ -171,7 +161,6 @@ public class EnemySpawner : MonoBehaviour
             UpdateGlowEffect();
         }
 
-        // Animações separadas do movimento
         if (canMove && agent != null)
         {
             FleeFromPlayer();
@@ -179,7 +168,6 @@ public class EnemySpawner : MonoBehaviour
         }
         else
         {
-            // Se não está se movendo, usa animação idle padrão
             UpdateIdleAnimation();
         }
 
@@ -198,21 +186,18 @@ public class EnemySpawner : MonoBehaviour
     {
         if (animator == null) return;
         
-        // Desativa todas as animações de movimento
         animator.SetBool("stopped", false);
         animator.SetBool("walking_left", false);
         animator.SetBool("walking_right", false);
         animator.SetBool("walking_up", false);
         animator.SetBool("walking_down", false);
         
-        // Se tem nome de animação idle, usa SetBool, senão força walking_down
         if (!string.IsNullOrEmpty(idleAnimationState))
         {
             animator.SetBool(idleAnimationState, true);
         }
         else
         {
-            // Default: usa walking_down como idle
             animator.SetBool("walking_down", true);
         }
     }
@@ -220,15 +205,12 @@ public class EnemySpawner : MonoBehaviour
     void UpdateGlowEffect()
     {
         if (spriteRenderer == null) return;
-        
-        // Se não tem visual effects habilitado mas está em warning, precisa do spriteRenderer
         if (!useVisualEffects && !isWarning) return;
 
         pulseTimer += Time.deltaTime * pulseSpeed;
         
         if (isWarning)
         {
-            // Efeito de aviso: pulsação rápida e intensa
             warningTimer += Time.deltaTime;
             float warningPulse = Mathf.Sin(warningTimer * warningPulseSpeed * Mathf.PI) * 0.5f + 0.5f;
             Color warning = Color.Lerp(originalColor, warningColor, warningPulse * warningGlowIntensity);
@@ -236,14 +218,12 @@ public class EnemySpawner : MonoBehaviour
         }
         else if (isFlashing)
         {
-            // Durante o flash, usa cor branca brilhante
             Color flash = flashColor;
             flash.a = 1f;
             spriteRenderer.color = flash;
         }
         else if (useVisualEffects)
         {
-            // Pulsa normalmente
             float alpha = Mathf.Lerp(Mathf.Max(minAlpha, 0.3f), maxAlpha, (Mathf.Sin(pulseTimer) + 1f) / 2f);
             Color newColor = glowColor;
             newColor.a = alpha;
@@ -273,21 +253,14 @@ public class EnemySpawner : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-        // Se o player está muito perto, foge!
         if (distanceToPlayer < detectionRange)
         {
-            // Calcula direção oposta ao player
             Vector3 directionAwayFromPlayer = (transform.position - player.position).normalized;
-            
-            // Calcula posição de fuga
             Vector3 fleePosition = transform.position + directionAwayFromPlayer * fleeDistance;
-            
-            // Define destino no NavMesh
             agent.SetDestination(fleePosition);
         }
         else
         {
-            // Se o player está longe, para de se mover
             agent.ResetPath();
         }
     }
@@ -296,29 +269,24 @@ public class EnemySpawner : MonoBehaviour
     {
         if (animator == null || agent == null) return;
 
-        // Usa a velocidade do NavMeshAgent para controlar animações
         Vector3 velocity = agent.velocity;
         float moveHorizontal = velocity.x;
         float moveVertical = velocity.y;
 
-        // Verifica se está realmente parado (sem caminho ativo E velocidade baixa)
         bool isStopped = !agent.hasPath || agent.remainingDistance <= agent.stoppingDistance || velocity.magnitude < 0.1f;
 
-        // Se está parado, usa animação idle
         if (isStopped)
         {
             UpdateIdleAnimation();
             return;
         }
 
-        // Se está em movimento, desativa stopping e idle
         animator.SetBool("stopped", false);
         if (!string.IsNullOrEmpty(idleAnimationState))
         {
             animator.SetBool(idleAnimationState, false);
         }
 
-        // Previne animação diagonal - prioriza o eixo com maior movimento
         if (Mathf.Abs(moveHorizontal) > 0.1f && Mathf.Abs(moveVertical) > 0.1f)
         {
             if (Mathf.Abs(moveHorizontal) >= Mathf.Abs(moveVertical))
@@ -331,30 +299,28 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        // Movimento horizontal
-        if (moveHorizontal < -0.1f) // Esquerda
+        if (moveHorizontal < -0.1f)
         {
             animator.SetBool("walking_left", true);
             animator.SetBool("walking_right", false);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
         }
-        else if (moveHorizontal > 0.1f) // Direita
+        else if (moveHorizontal > 0.1f)
         {
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", true);
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", false);
         }
-        // Movimento vertical
-        else if (moveVertical > 0.1f) // Cima
+        else if (moveVertical > 0.1f)
         {
             animator.SetBool("walking_up", true);
             animator.SetBool("walking_down", false);
             animator.SetBool("walking_left", false);
             animator.SetBool("walking_right", false);
         }
-        else if (moveVertical < -0.1f) // Baixo
+        else if (moveVertical < -0.1f)
         {
             animator.SetBool("walking_up", false);
             animator.SetBool("walking_down", true);
@@ -372,7 +338,6 @@ public class EnemySpawner : MonoBehaviour
         }
 
         Vector2 spawnPosition;
-
         if (useRandomSpawn)
         {
             spawnPosition = new Vector2(
@@ -385,33 +350,111 @@ public class EnemySpawner : MonoBehaviour
             spawnPosition = transform.position;
         }
 
-        // Mostra indicador antes de spawnar (sem bloquear)
-        if (showSpawnIndicator)
+        StartCoroutine(ShowSpawnIndicatorAndSpawnAsync(spawnPosition));
+    }
+
+    System.Collections.IEnumerator ShowSpawnIndicatorAndSpawnAsync(Vector3 position)
+    {
+        GameObject indicator = null;
+
+        // Cria o indicador
+        if (spawnIndicatorPrefab != null)
         {
-            StartCoroutine(ShowSpawnIndicatorAsync(spawnPosition));
+            indicator = Instantiate(spawnIndicatorPrefab, position, Quaternion.identity);
+        }
+        else
+        {
+            indicator = new GameObject("SpawnIndicator");
+            indicator.transform.position = position;
+            indicator.transform.localScale = Vector3.one * indicatorSize;
+            
+            var sr = indicator.AddComponent<SpriteRenderer>();
+            Sprite circleSprite = Resources.Load<Sprite>("circle");
+            if (circleSprite != null)
+            {
+                sr.sprite = circleSprite;
+            }
+            sr.color = warningColor;
+            sr.sortingOrder = 10;
         }
 
-        // Cria o inimigo imediatamente (não espera o indicador)
-        GameObject enemy = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-        
+        SpriteRenderer spriteRend = indicator.GetComponent<SpriteRenderer>();
+        Vector3 startScale = Vector3.zero;
+        Vector3 endScale = Vector3.one * indicatorSize * 1.5f;
+        float elapsed = 0f;
+
+        // Loop de animação do portal
+        while (elapsed < indicatorDuration)
+        {
+            // VERIFICAÇÃO CRÍTICA: Se o spawner foi destruído, cancela tudo
+            if (this == null || isDestroyed || gameObject == null || !gameObject.activeInHierarchy)
+            {
+                if (indicator != null)
+                {
+                    Destroy(indicator);
+                }
+                yield break; // Para a corrotina imediatamente
+            }
+
+            // Se o player morreu, cancela o spawn
+            if (player == null || player.gameObject == null || !player.gameObject.activeInHierarchy)
+            {
+                if (indicator != null)
+                {
+                    Destroy(indicator);
+                }
+                yield break;
+            }
+
+            elapsed += Time.deltaTime;
+            float t = elapsed / indicatorDuration;
+            float pulse = Mathf.Sin(elapsed * warningPulseSpeed * Mathf.PI) * 0.5f + 0.5f;
+            float scaleMultiplier = 1f + (pulse * 0.3f);
+            
+            if (indicator != null)
+            {
+                indicator.transform.localScale = Vector3.Lerp(startScale, endScale, t) * scaleMultiplier;
+            }
+
+            if (spriteRend != null)
+            {
+                Color glowColor = Color.Lerp(warningColor, Color.white, pulse * 0.5f);
+                glowColor.a = Mathf.Lerp(warningColor.a, 0f, t * t);
+                spriteRend.color = glowColor;
+            }
+
+            yield return null;
+        }
+
+        // Última verificação antes de spawnar
+        if (this == null || isDestroyed || gameObject == null || !gameObject.activeInHierarchy)
+        {
+            if (indicator != null)
+            {
+                Destroy(indicator);
+            }
+            yield break;
+        }
+
+        // Destrói o indicador
+        if (indicator != null)
+        {
+            Destroy(indicator);
+        }
+
+        // Spawna o inimigo
+        GameObject enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
         Enemy enemyScript = enemy.GetComponent<Enemy>();
+        
         if (enemyScript != null && player != null)
         {
             var targetField = enemyScript.GetType().GetField("target", 
                 System.Reflection.BindingFlags.NonPublic | 
                 System.Reflection.BindingFlags.Instance);
-            
             if (targetField != null)
                 targetField.SetValue(enemyScript, player);
         }
 
-        if (flashOnSpawn)
-        {
-            isFlashing = true;
-            flashTimer = 0f;
-        }
-        
-        // Reseta cor após spawn
         if (spriteRenderer != null && showWarningEffect)
         {
             spriteRenderer.color = originalColor;
@@ -419,72 +462,31 @@ public class EnemySpawner : MonoBehaviour
 
         currentEnemyCount++;
         Debug.Log($"Slave spawned! Total: {currentEnemyCount}");
+
+        if (flashOnSpawn)
+        {
+            isFlashing = true;
+            flashTimer = 0f;
+        }
     }
 
-    System.Collections.IEnumerator ShowSpawnIndicatorAsync(Vector3 position)
+    // ÚNICO OnDestroy - cancela todas as corrotinas e animações
+    private void OnDestroy()
     {
-        GameObject indicator;
-
-        // Usa prefab customizado se fornecido, senão cria um círculo brilhante
-        if (spawnIndicatorPrefab != null)
-        {
-            indicator = Instantiate(spawnIndicatorPrefab, position, Quaternion.identity);
-        }
-        else
-        {
-            // Cria indicador visual brilhante
-            indicator = new GameObject("SpawnIndicator");
-            indicator.transform.position = position;
-            indicator.transform.localScale = Vector3.one * indicatorSize;
-            
-            var sr = indicator.AddComponent<SpriteRenderer>();
-            // Tenta carregar sprite de círculo, se não existir usa um quad
-            Sprite circleSprite = Resources.Load<Sprite>("circle");
-            if (circleSprite == null)
-            {
-                // Cria um sprite simples (quadrado)
-                sr.sprite = null;
-                sr.drawMode = SpriteDrawMode.Simple;
-            }
-            else
-            {
-                sr.sprite = circleSprite;
-            }
-            sr.color = warningColor;
-            sr.sortingOrder = 10; // Fica acima de tudo
-        }
-
-        SpriteRenderer spriteRend = indicator.GetComponent<SpriteRenderer>();
+        isDestroyed = true; // Marca como destruído
+        StopAllCoroutines(); // Para todas as corrotinas
         
-        // Efeito de pulsação e crescimento
-        Vector3 startScale = Vector3.zero;
-        Vector3 endScale = Vector3.one * indicatorSize;
-        float elapsed = 0f;
-
-        while (elapsed < indicatorDuration)
+        // Para todas as animações
+        if (animator != null)
         {
-            elapsed += Time.deltaTime;
-            float t = elapsed / indicatorDuration;
-            
-            // Pulsação rápida (brilho)
-            float pulse = Mathf.Sin(elapsed * warningPulseSpeed * Mathf.PI) * 0.5f + 0.5f;
-            
-            // Escala crescente com pulsação
-            float scaleMultiplier = 1f + (pulse * 0.3f);
-            indicator.transform.localScale = Vector3.Lerp(startScale, endScale, t) * scaleMultiplier;
-            
-            // Cor pulsante que vai sumindo
-            if (spriteRend != null)
-            {
-                Color glowColor = Color.Lerp(warningColor, Color.white, pulse * 0.5f);
-                glowColor.a = Mathf.Lerp(warningColor.a, 0f, t * t); // Fade out acelerado
-                spriteRend.color = glowColor;
-            }
-            
-            yield return null;
+            animator.enabled = false; // Desativa o animator
         }
-
-        Destroy(indicator);
+        
+        // Para o movimento se existir
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -512,11 +514,9 @@ public class EnemySpawner : MonoBehaviour
 
         if (canMove)
         {
-            // Desenha área de detecção
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, detectionRange);
             
-            // Desenha distância de fuga
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(transform.position, fleeDistance);
         }
